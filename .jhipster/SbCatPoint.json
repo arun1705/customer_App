@@ -1,0 +1,58 @@
+{
+    "name": "SbCatPoint",
+    "fields": [
+        {
+            "fieldName": "pointCount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "subCategory",
+            "otherEntityRelationshipName": "sbCatPoint",
+            "relationshipValidateRules": "required",
+            "javadoc": "SbCatPoint relationship",
+            "relationshipName": "subCategory",
+            "otherEntityField": "ecode"
+        }
+    ],
+    "changelogDate": "20200228194153",
+    "javadoc": "This is a SbCatPoint type enitiy which will store all Sub Catgeory point mapping related details\\npoinCount is mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "sb_cat_point",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

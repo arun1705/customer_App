@@ -1,0 +1,85 @@
+{
+    "name": "SubCategory",
+    "fields": [
+        {
+            "fieldName": "ename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 275,
+            "fieldValidateRulesMinlength": 2
+        },
+        {
+            "fieldName": "ecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 75,
+            "fieldValidateRulesMinlength": 1
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "subCategoryType",
+            "otherEntityRelationshipName": "subCategory",
+            "javadoc": "SubCategory relationship",
+            "relationshipName": "subCategoryType",
+            "otherEntityField": "ecode",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "sbCatBPoint",
+            "otherEntityRelationshipName": "subCategory",
+            "relationshipName": "sbCatBPoint"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "sbCatPoint",
+            "otherEntityRelationshipName": "subCategory",
+            "relationshipName": "sbCatPoint"
+        }
+    ],
+    "changelogDate": "20200228194145",
+    "javadoc": "This is a SubCategory type enitiy which will store all product sub category related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "sub_category",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "customer_app_v4",
+  "createdWith": "3.5.1",
+  "boilerplate": "ignite-jhipster",
+  "jhipsterDirectory": "../app_gateway",
+  "authType": "uaa",
+  "searchEngine": true,
+  "websockets": true,
+  "detox": false,
+  "askToOverwrite": false,
+  "generators": {
+    "entity": "ignite-jhipster",
+    "import-jdl": "ignite-jhipster",
+    "upgrade": "ignite-jhipster"
+  },
+  "boilerplateVersion": "3.4.0"
+}

@@ -1,0 +1,133 @@
+{
+    "name": "UserDetails",
+    "fields": [
+        {
+            "fieldName": "firstName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 275
+        },
+        {
+            "fieldName": "middleName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 75
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 275
+        },
+        {
+            "fieldName": "aadharNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 75
+        },
+        {
+            "fieldName": "panCard",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 75
+        },
+        {
+            "fieldName": "userId",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "loginId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 75
+        },
+        {
+            "fieldName": "userStatus",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipName": "createdBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipName": "modifiedBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userType",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipName": "userType",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "address",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipValidateRules": "required",
+            "relationshipName": "address"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "phone",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipValidateRules": "required",
+            "relationshipName": "phone"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "emailAdd",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipValidateRules": "required",
+            "relationshipName": "emailAdd"
+        }
+    ],
+    "changelogDate": "20200228194010",
+    "entityTableName": "user_details",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "userdetailsservice"
+}

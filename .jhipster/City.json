@@ -1,0 +1,93 @@
+{
+    "name": "City",
+    "fields": [
+        {
+            "fieldName": "ename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 275,
+            "fieldValidateRulesMinlength": 2
+        },
+        {
+            "fieldName": "ecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 75,
+            "fieldValidateRulesMinlength": 1
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "country",
+            "otherEntityRelationshipName": "city",
+            "relationshipValidateRules": "required",
+            "javadoc": "City relationship",
+            "relationshipName": "country",
+            "otherEntityField": "ecode"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "state",
+            "otherEntityRelationshipName": "city",
+            "relationshipValidateRules": "required",
+            "relationshipName": "state",
+            "otherEntityField": "ecode"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pincode",
+            "otherEntityRelationshipName": "city",
+            "relationshipName": "pincode"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "area",
+            "otherEntityRelationshipName": "city",
+            "relationshipName": "area"
+        }
+    ],
+    "changelogDate": "20200228194138",
+    "javadoc": "This is a city enitiy which will store all city related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "city",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

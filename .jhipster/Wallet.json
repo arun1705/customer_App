@@ -1,0 +1,72 @@
+{
+    "name": "Wallet",
+    "fields": [
+        {
+            "fieldName": "userId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "walletUUID",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "bankVerified",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "pancardVerified",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "pancardVerify",
+            "otherEntityRelationshipName": "wallet",
+            "relationshipName": "pancardVerify",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "bankDetailsVerify",
+            "otherEntityRelationshipName": "wallet",
+            "relationshipName": "bankDetailsVerify",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "walletTx",
+            "otherEntityRelationshipName": "wallet",
+            "relationshipName": "walletTx"
+        }
+    ],
+    "changelogDate": "20200411204737",
+    "javadoc": "@author Vinay Kahar",
+    "entityTableName": "wallet",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "pointspaymentservice"
+}

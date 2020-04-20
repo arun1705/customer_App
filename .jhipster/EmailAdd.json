@@ -1,0 +1,72 @@
+{
+    "name": "EmailAdd",
+    "fields": [
+        {
+            "fieldName": "emailAdd",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 75
+        },
+        {
+            "fieldName": "primary",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "emailAdd",
+            "relationshipName": "createdBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "emailAdd",
+            "relationshipName": "modifiedBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "emailType",
+            "otherEntityRelationshipName": "emailAdd",
+            "relationshipName": "emailType",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "emailAdd",
+            "relationshipName": "userDetails",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200228194016",
+    "entityTableName": "email_add",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "userdetailsservice"
+}

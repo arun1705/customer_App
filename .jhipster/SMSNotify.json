@@ -1,0 +1,51 @@
+{
+    "name": "SMSNotify",
+    "fields": [
+        {
+            "fieldName": "orderReqId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "mobile",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "userId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "message",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "orderRequest",
+            "otherEntityRelationshipName": "smsNotify",
+            "relationshipValidateRules": "required",
+            "relationshipName": "orderRequest",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200228194212",
+    "entityTableName": "sms_notify",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "orderservice",
+    "searchEngine": "elasticsearch"
+}

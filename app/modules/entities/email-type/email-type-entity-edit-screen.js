@@ -1,0 +1,172 @@
+// import React from 'react'
+// import { Alert, ScrollView, Text, TouchableHighlight, View } from 'react-native'
+// import { connect } from 'react-redux'
+// import EmailTypeActions from './email-type.reducer'
+// import { Navigation } from 'react-native-navigation'
+// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+// import { emailTypeEntityDetailScreen } from '../../../navigation/layouts'
+
+// import t from 'tcomb-form-native'
+
+// import styles from './email-type-entity-edit-screen-style'
+
+// let Form = t.form.Form
+
+// class EmailTypeEntityEditScreen extends React.Component {
+//   constructor(props) {
+//     super(props)
+//     Navigation.events().bindComponent(this)
+//     this.state = {
+//       formModel: t.struct({
+//         id: t.maybe(t.Number),
+//         ename: t.String,
+//         ecode: t.String,
+//         activeValue: t.Boolean,
+//       }),
+//       formValue: { id: null },
+//       formOptions: {
+//         fields: {
+//           id: {
+//             hidden: true,
+//           },
+//           ename: {
+//             returnKeyType: 'next',
+//             onSubmitEditing: () => this.form.getComponent('ecode').refs.input.focus(),
+//             testID: 'enameInput',
+//           },
+//           ecode: {
+//             returnKeyType: 'next',
+//             onSubmitEditing: () => this.form.getComponent('activeValue').refs.input.focus(),
+//             testID: 'ecodeInput',
+//           },
+//           activeValue: {
+//             returnKeyType: 'done',
+//             onSubmitEditing: () => this.submitForm(),
+//             testID: 'activeValueInput',
+//           },
+//         },
+//       },
+//       emailType: {},
+//       isNewEntity: true,
+//     }
+//     if (props.data && props.data.entityId) {
+//       this.state.isNewEntity = false
+//       this.props.getEmailType(props.data.entityId)
+//     }
+
+//     this.submitForm = this.submitForm.bind(this)
+//     this.formChange = this.formChange.bind(this)
+//   }
+
+//   static getDerivedStateFromProps(nextProps, prevState) {
+//     if (nextProps.emailType !== prevState.emailType && !prevState.isNewEntity) {
+//       return { formValue: entityToFormValue(nextProps.emailType), emailType: nextProps.emailType }
+//     }
+//     return null
+//   }
+//   componentDidUpdate(prevProps) {
+//     if (prevProps.updating && !this.props.updating) {
+//       if (this.props.error) {
+//         Alert.alert('Error', 'Something went wrong updating the entity', [{ text: 'OK' }])
+//       } else {
+//         this.props.getAllEmailTypes({ page: 0, sort: 'id,asc', size: 20 })
+//         const entityId = this.props.emailType.id
+//         const alertOptions = [{ text: 'OK' }]
+//         if (!this.state.formValue.id) {
+//           alertOptions.push({
+//             text: 'View',
+//             onPress: emailTypeEntityDetailScreen.bind(this, { entityId }),
+//           })
+//         }
+//         Navigation.pop(this.props.componentId)
+//         Alert.alert('Success', 'Entity saved successfully', alertOptions)
+//       }
+//     }
+//   }
+
+//   submitForm() {
+//     // call getValue() to get the values of the form
+//     const emailType = this.form.getValue()
+//     if (emailType) {
+//       // if validation fails, value will be null
+//       this.props.updateEmailType(formValueToEntity(emailType))
+//     }
+//   }
+
+//   formChange(newValue) {
+//     this.setState({
+//       formValue: newValue,
+//     })
+//   }
+
+//   render() {
+//     if (this.props.fetching) {
+//       return (
+//         <View>
+//           <Text>Loading...</Text>
+//         </View>
+//       )
+//     }
+//     return (
+//       <KeyboardAwareScrollView>
+//         <ScrollView style={styles.container} testID="entityScrollView">
+//           <Form
+//             ref={c => {
+//               this.form = c
+//             }}
+//             type={this.state.formModel}
+//             options={this.state.formOptions}
+//             value={this.state.formValue}
+//             onChange={this.formChange}
+//           />
+//           <TouchableHighlight style={styles.button} onPress={this.submitForm} underlayColor="#99d9f4" testID="submitButton">
+//             <Text style={styles.buttonText}>Save</Text>
+//           </TouchableHighlight>
+//         </ScrollView>
+//       </KeyboardAwareScrollView>
+//     )
+//   }
+// }
+// // convenience methods for customizing the mapping of the entity to/from the form value
+// const entityToFormValue = value => {
+//   if (!value) {
+//     return {}
+//   }
+//   return {
+//     id: value.id || null,
+//     ename: value.ename || null,
+//     ecode: value.ecode || null,
+//     activeValue: value.activeValue || null,
+//   }
+// }
+// const formValueToEntity = value => {
+//   const entity = {
+//     id: value.id || null,
+//     ename: value.ename || null,
+//     ecode: value.ecode || null,
+//     activeValue: value.activeValue || null,
+//   }
+//   return entity
+// }
+
+// const mapStateToProps = state => {
+//   return {
+//     emailType: state.emailTypes.emailType,
+//     fetching: state.emailTypes.fetchingOne,
+//     updating: state.emailTypes.updating,
+//     error: state.emailTypes.errorUpdating,
+//   }
+// }
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getEmailType: id => dispatch(EmailTypeActions.emailTypeRequest(id)),
+//     getAllEmailTypes: options => dispatch(EmailTypeActions.emailTypeAllRequest(options)),
+//     updateEmailType: emailType => dispatch(EmailTypeActions.emailTypeUpdateRequest(emailType)),
+//   }
+// }
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps,
+// )(EmailTypeEntityEditScreen)

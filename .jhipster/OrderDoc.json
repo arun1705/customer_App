@@ -1,0 +1,54 @@
+{
+    "name": "OrderDoc",
+    "fields": [
+        {
+            "fieldName": "orderDetailId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "fileName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "fileUrl",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 300
+        },
+        {
+            "fieldName": "contentType",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "orderDetails",
+            "otherEntityRelationshipName": "orderDoc",
+            "relationshipValidateRules": "required",
+            "relationshipName": "orderDetails",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200228194217",
+    "entityTableName": "order_doc",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "orderservice",
+    "searchEngine": "elasticsearch"
+}

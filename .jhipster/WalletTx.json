@@ -1,0 +1,96 @@
+{
+    "name": "WalletTx",
+    "fields": [
+        {
+            "fieldName": "userId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "txId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "txUUID",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "benificiaryId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "prevBalance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "newBalance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "txType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "txMode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "statusCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "statusMessage",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "txPurpose",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "requestedOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "initiatedOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "completedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "wallet",
+            "otherEntityRelationshipName": "walletTx",
+            "relationshipName": "wallet",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200411204738",
+    "entityTableName": "wallet_tx",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "pointspaymentservice"
+}

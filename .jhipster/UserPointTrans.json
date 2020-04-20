@@ -1,0 +1,41 @@
+{
+    "name": "UserPointTrans",
+    "fields": [
+        {
+            "fieldName": "customerId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "prevPoints",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "prevAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "updatedPoints",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "updatedAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "credited",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200228194219",
+    "entityTableName": "user_point_trans",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "orderservice",
+    "searchEngine": "elasticsearch"
+}

@@ -1,0 +1,66 @@
+{
+    "name": "CurrencyBPoint",
+    "fields": [
+        {
+            "fieldName": "bPointvalue",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "currency",
+            "otherEntityRelationshipName": "currencyBPoint",
+            "relationshipValidateRules": "required",
+            "javadoc": "CurrencyPoint relationship",
+            "relationshipName": "currency",
+            "otherEntityField": "ecode"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "country",
+            "otherEntityRelationshipName": "currencyBPoint",
+            "relationshipValidateRules": "required",
+            "relationshipName": "country",
+            "otherEntityField": "ecode"
+        }
+    ],
+    "changelogDate": "20200228194148",
+    "javadoc": "This is a CurrencyBPoint type enitiy which will store all currency bonus point related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "currency_b_point",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

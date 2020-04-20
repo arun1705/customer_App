@@ -1,0 +1,71 @@
+{
+    "name": "StatusType",
+    "fields": [
+        {
+            "fieldName": "ename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 275,
+            "fieldValidateRulesMinlength": 2
+        },
+        {
+            "fieldName": "ecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength",
+                "unique"
+            ],
+            "fieldValidateRulesMaxlength": 75,
+            "fieldValidateRulesMinlength": 1
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "status",
+            "otherEntityRelationshipName": "statusType",
+            "relationshipName": "status"
+        }
+    ],
+    "changelogDate": "20200228194141",
+    "javadoc": "This is a status type enitiy which will store all status type related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "status_type",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

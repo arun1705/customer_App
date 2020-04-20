@@ -1,0 +1,105 @@
+{
+    "name": "Address",
+    "fields": [
+        {
+            "fieldName": "countryId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "regionId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "stateId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "cityId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "pincodeId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "areaId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "addressLineOne",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 275
+        },
+        {
+            "fieldName": "addressLineTwo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 275
+        },
+        {
+            "fieldName": "primary",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "address",
+            "relationshipName": "createdBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "address",
+            "relationshipName": "modifiedBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "addressType",
+            "otherEntityRelationshipName": "address",
+            "relationshipName": "addressType",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "userDetails",
+            "otherEntityRelationshipName": "address",
+            "relationshipName": "userDetails",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200228194012",
+    "entityTableName": "address",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "userdetailsservice"
+}

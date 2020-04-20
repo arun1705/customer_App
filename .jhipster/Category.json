@@ -1,0 +1,79 @@
+{
+    "name": "Category",
+    "fields": [
+        {
+            "fieldName": "ename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 275,
+            "fieldValidateRulesMinlength": 2
+        },
+        {
+            "fieldName": "ecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength",
+                "unique"
+            ],
+            "fieldValidateRulesMaxlength": 75,
+            "fieldValidateRulesMinlength": 1
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catBPoint",
+            "otherEntityRelationshipName": "category",
+            "relationshipName": "catBPoint"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "subCategoryType",
+            "otherEntityRelationshipName": "category",
+            "relationshipName": "subCategoryType",
+            "otherEntityField": "ecode",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200228194143",
+    "javadoc": "This is a Category type enitiy which will store all product category type related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "category",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

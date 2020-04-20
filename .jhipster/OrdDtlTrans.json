@@ -1,0 +1,98 @@
+{
+    "name": "OrdDtlTrans",
+    "fields": [
+        {
+            "fieldName": "orderReqId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "productId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "quantity",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "catBPoint",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "catBPCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "catTypeBPointId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "catTypeBPCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "prodBPointId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "prodBPCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "productPointId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "prodPCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "curncyPointId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "curncyBPointId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "productValue",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "orderRequest",
+            "otherEntityRelationshipName": "ordDtlTrans",
+            "relationshipValidateRules": "required",
+            "relationshipName": "orderRequest",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200228194216",
+    "entityTableName": "ord_dtl_trans",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "orderservice",
+    "searchEngine": "elasticsearch"
+}

@@ -1,0 +1,107 @@
+{
+    "name": "Country",
+    "fields": [
+        {
+            "fieldName": "ename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 275,
+            "fieldValidateRulesMinlength": 2
+        },
+        {
+            "fieldName": "ecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": 75,
+            "fieldValidateRulesMinlength": 1
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "currency",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "currency",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "state",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "state"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "city",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "city"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pincode",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "pincode"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "area",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "area"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "currencyPoint",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "currencyPoint"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "currencyBPoint",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "currencyBPoint"
+        }
+    ],
+    "changelogDate": "20200228194136",
+    "javadoc": "This is a state enitiy which will store all state related details\\nName and code are mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "country",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}

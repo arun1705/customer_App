@@ -1,0 +1,66 @@
+{
+    "name": "SbCatTypeBPoint",
+    "fields": [
+        {
+            "fieldName": "bPointCount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "activeValue",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdOn",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modifiedBy",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "modifiedOn",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "subCategoryType",
+            "otherEntityRelationshipName": "sbCatTypeBPoint",
+            "relationshipValidateRules": "required",
+            "javadoc": "SbCatTypePoint relationship",
+            "relationshipName": "subCategoryType",
+            "otherEntityField": "ecode"
+        }
+    ],
+    "changelogDate": "20200228194152",
+    "javadoc": "This is a SbCatTypeBPoint type enitiy which will store all Sub Catgeory type and bonus point mapping related details\\npoinCount is mandatory fields\\n@author Vinay Kahar",
+    "entityTableName": "sb_cat_type_b_point",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "microserviceName": "masterservice",
+    "searchEngine": "elasticsearch"
+}
