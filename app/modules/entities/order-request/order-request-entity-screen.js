@@ -10,10 +10,13 @@ import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import colors from '../../../shared/themes/colors'
 import { Colors } from '../../../shared/themes'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
 class OrderRequestEntityScreen extends React.PureComponent {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.renderRow = this.renderRow.bind(this)
@@ -331,26 +334,32 @@ class OrderRequestEntityScreen extends React.PureComponent {
 
   render() {
     return (
-      <View testID="orderRequestScreen" style={{ flex: 1 }}>
-        {!this.props.fetching ? (
-          <ScrollView>
-            <FlatList
-              contentContainerStyle={styles.listContent}
-              data={this.state.dataObjects}
-              refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh.bind(this)} />}
-              renderItem={this.renderRow}
-              keyExtractor={this.keyExtractor}
-              onEndReached={this.handleLoadMore}
-              initialNumToRender={this.oneScreensWorth}
-              ListEmptyComponent={this.renderEmpty}
-            />
-          </ScrollView>
-        ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
+      <>
+        {this.context.isInternetReachable ? (
+          <View testID="orderRequestScreen" style={{ flex: 1 }}>
+            {!this.props.fetching ? (
+              <ScrollView>
+                <FlatList
+                  contentContainerStyle={styles.listContent}
+                  data={this.state.dataObjects}
+                  refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh.bind(this)} />}
+                  renderItem={this.renderRow}
+                  keyExtractor={this.keyExtractor}
+                  onEndReached={this.handleLoadMore}
+                  initialNumToRender={this.oneScreensWorth}
+                  ListEmptyComponent={this.renderEmpty}
+                />
+              </ScrollView>
+            ) : (
+              <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
+              </View>
+            )}
           </View>
+        ) : (
+          <NetWork />
         )}
-      </View>
+      </>
     )
   }
 }

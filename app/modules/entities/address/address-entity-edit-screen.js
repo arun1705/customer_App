@@ -13,8 +13,12 @@ import AreaActions from '../area/area.reducer'
 import AddressActions from './address.reducer'
 import AddressTypeActions from '../address-type/address-type.reducer'
 import { connect } from 'react-redux'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 class AddressAddEditScreen extends Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
 
@@ -311,141 +315,136 @@ class AddressAddEditScreen extends Component {
       <>
         <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
           <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+          {this.context.isInternetReachable ? (
+            <>
+              <View style={styles.box}>
+                {addressId > 0 ? (
+                  <View style={styles.row}>
+                    <Text style={styles.header}>Edit Address</Text>
+                  </View>
+                ) : (
+                  <View style={styles.row}>
+                    <Text style={styles.header}>Add Address</Text>
+                  </View>
+                )}
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select Address Type"
+                    data={addressTypeList}
+                    value={this.state.selectedAddressType}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.setAddressType.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select Country"
+                    data={countryList}
+                    value={this.state.selectedCountry}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.getState.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select State"
+                    data={stateList}
+                    value={this.state.selectedState}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.getCity.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select City"
+                    data={cityList}
+                    value={this.state.selectedCity}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.getPincode.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select Pincode"
+                    data={pincodeList}
+                    value={this.state.selectedPincode}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.getArea.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select Area"
+                    data={areaList}
+                    value={this.state.selectedArea}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.setArea.bind(this)}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    maxLength={150}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Address Line One"
+                    onChangeText={addressLineOne => {
+                      this.addressLineOneErrMsg = ''
+                      this.setState({ addressLineOne })
+                    }}
+                    value={this.state.addressLineOne}
+                    error={this.addressLineOneErrMsg}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    maxLength={150}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Address Line Two"
+                    onChangeText={addressLineTwo => {
+                      this.addressLineTwoErrMsg = ''
+                      this.setState({ addressLineTwo })
+                    }}
+                    value={this.state.addressLineTwo}
+                    error={this.addressLineTwoErrMsg}
+                  />
+                </View>
+                <View style={styles.toggleButton}>
+                  <Text style={{ fontSize: 20, color: Colors.textField, marginLeft: 10 }}>Make it primary Address?</Text>
+                  <Switch
+                    value={isSwitchOn}
+                    onValueChange={() => {
+                      this.setState({ isSwitchOn: !isSwitchOn })
+                    }}
+                    style={{ alignSelf: 'flex-end' }}
+                  />
+                </View>
+                <View style={[styles.rowButton]}>
+                  <Button
+                    mode="contained"
+                    uppercase="false"
+                    // disabled={!this.context.isConnected || this.props.fetching}
+                    color={Colors.background}
+                    style={styles.buttonWrapper}
+                    onPress={this.submitUpdate}>
+                    <Text style={styles.buttonText}>SAVE</Text>
+                  </Button>
 
-          <View style={styles.box}>
-            {addressId > 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.header}>Edit Address</Text>
-              </View>
-            ) : (
-              <View style={styles.row}>
-                <Text style={styles.header}>Add Address</Text>
-              </View>
-            )}
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select Address Type"
-                data={addressTypeList}
-                value={this.state.selectedAddressType}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.setAddressType.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select Country"
-                data={countryList}
-                value={this.state.selectedCountry}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.getState.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select State"
-                data={stateList}
-                value={this.state.selectedState}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.getCity.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select City"
-                data={cityList}
-                value={this.state.selectedCity}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.getPincode.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select Pincode"
-                data={pincodeList}
-                value={this.state.selectedPincode}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.getArea.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <Dropdown
-                label="Select Area"
-                data={areaList}
-                value={this.state.selectedArea}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.setArea.bind(this)}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                maxLength={150}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Address Line One"
-                onChangeText={addressLineOne => {
-                  this.addressLineOneErrMsg = ''
-                  this.setState({ addressLineOne })
-                }}
-                value={this.state.addressLineOne}
-                error={this.addressLineOneErrMsg}
-              />
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                maxLength={150}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Address Line Two"
-                onChangeText={addressLineTwo => {
-                  this.addressLineTwoErrMsg = ''
-                  this.setState({ addressLineTwo })
-                }}
-                value={this.state.addressLineTwo}
-                error={this.addressLineTwoErrMsg}
-              />
-            </View>
-
-            <View style={styles.toggleButton}>
-              <Text style={{ fontSize: 20, color: Colors.textField, marginLeft: 10 }}>Make it primary Address?</Text>
-              <Switch
-                value={isSwitchOn}
-                onValueChange={() => {
-                  this.setState({ isSwitchOn: !isSwitchOn })
-                }}
-                style={{ alignSelf: 'flex-end' }}
-              />
-            </View>
-
-            <View style={[styles.rowButton]}>
-              <Button
-                mode="contained"
-                uppercase="false"
-                // disabled={!this.context.isConnected || this.props.fetching}
-                color={Colors.background}
-                style={styles.buttonWrapper}
-                onPress={this.submitUpdate}>
-                <Text style={styles.buttonText}>SAVE</Text>
-              </Button>
-
-              {/* {addressId > 0 ? (
+                  {/* {addressId > 0 ? (
               <Button mode="contained" uppercase="false" color={Colors.fire} style={styles.buttonWrapper} onPress={this.submitUpdate}>
                 <Text style={styles.buttonText}>DELETE</Text>
               </Button>
             ) : null} */}
-            </View>
-          </View>
+                </View>
+              </View>
+            </>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </>
     )

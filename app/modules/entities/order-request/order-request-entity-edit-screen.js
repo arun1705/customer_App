@@ -10,7 +10,11 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import { Dropdown } from 'react-native-material-dropdown'
 import styles from './order-request-entity-edit-screen-style'
 import { validateMobNum, validateMobNumLength } from '../../../shared/res/Validate'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class OrderRequestEntityEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -178,121 +182,127 @@ class OrderRequestEntityEditScreen extends React.Component {
       )
     }
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer} style={[styles.container]} keyboardShouldPersistTaps="always">
-        <View style={styles.box}>
-          {this.state.addressList.length > 0 ? (
-            <View>
-              <View style={styles.row}>
-                <Image style={{ width: 150, height: 150, alignSelf: 'center' }} source={Images.pickUpTruck} />
-                <Text style={styles.text}> Tell us the address from where we will pick up the items</Text>
-              </View>
+      <>
+        {this.context.isInternetReachable ? (
+          <ScrollView contentContainerStyle={styles.contentContainer} style={[styles.container]} keyboardShouldPersistTaps="always">
+            <View style={styles.box}>
+              {this.state.addressList.length > 0 ? (
+                <View>
+                  <View style={styles.row}>
+                    <Image style={{ width: 150, height: 150, alignSelf: 'center' }} source={Images.pickUpTruck} />
+                    <Text style={styles.text}> Tell us the address from where we will pick up the items</Text>
+                  </View>
 
-              <View style={styles.row}>
-                <RadioForm
-                  animation={true}
-                  onPress={value => {
-                    this.addressError = ''
-                    this.setState({ addressIndex: value })
-                  }}>
-                  {/* To create radio buttons, loop through your array of options */}
-                  {this.state.addressList.map((obj, i) => (
-                    <RadioButton labelHorizontal={true} key={obj.value}>
-                      {/*  You can set RadioButtonLabel before RadioButtonInput */}
-                      <RadioButtonInput
-                        obj={obj}
-                        index={obj.value}
-                        buttonSize={12}
-                        isSelected={this.state.addressIndex === obj.value}
-                        onPress={value => {
-                          this.addressError = ''
-                          this.setState({ addressIndex: value })
-                        }}
-                        borderWidth={1}
-                        buttonInnerColor={'#04a262'}
-                        buttonOuterColor={this.state.addressIndex === obj.value ? '#04a262' : '#000'}
-                        buttonStyle={{}}
-                        buttonWrapStyle={{ marginLeft: 0, marginTop: 4 }}
-                      />
-                      <RadioButtonLabel
-                        obj={obj}
-                        index={i}
-                        onPress={value => {
-                          this.addressError = ''
+                  <View style={styles.row}>
+                    <RadioForm
+                      animation={true}
+                      onPress={value => {
+                        this.addressError = ''
+                        this.setState({ addressIndex: value })
+                      }}>
+                      {/* To create radio buttons, loop through your array of options */}
+                      {this.state.addressList.map((obj, i) => (
+                        <RadioButton labelHorizontal={true} key={obj.value}>
+                          {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                          <RadioButtonInput
+                            obj={obj}
+                            index={obj.value}
+                            buttonSize={12}
+                            isSelected={this.state.addressIndex === obj.value}
+                            onPress={value => {
+                              this.addressError = ''
+                              this.setState({ addressIndex: value })
+                            }}
+                            borderWidth={1}
+                            buttonInnerColor={'#04a262'}
+                            buttonOuterColor={this.state.addressIndex === obj.value ? '#04a262' : '#000'}
+                            buttonStyle={{}}
+                            buttonWrapStyle={{ marginLeft: 0, marginTop: 4 }}
+                          />
+                          <RadioButtonLabel
+                            obj={obj}
+                            index={i}
+                            onPress={value => {
+                              this.addressError = ''
 
-                          this.setState({ addressIndex: value })
-                        }}
-                        labelHorizontal={true}
-                        labelStyle={{ fontSize: 14, color: '#2d2d2d' }}
-                        labelWrapStyle={{ marginRight: 10 }}
-                      />
-                    </RadioButton>
-                  ))}
-                </RadioForm>
-                <View style={{ alignSelf: 'center' }}>
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.addressError}
-                  </HelperText>
+                              this.setState({ addressIndex: value })
+                            }}
+                            labelHorizontal={true}
+                            labelStyle={{ fontSize: 14, color: '#2d2d2d' }}
+                            labelWrapStyle={{ marginRight: 10 }}
+                          />
+                        </RadioButton>
+                      ))}
+                    </RadioForm>
+                    <View style={{ alignSelf: 'center' }}>
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.addressError}
+                      </HelperText>
+                    </View>
+                  </View>
+
+                  <View style={[styles.row]}>
+                    <Text style={styles.text}> Tell us the phone number to pick up the items</Text>
+                    <Dropdown
+                      baseColor={Colors.textField}
+                      label="Select Mobile Number"
+                      data={this.state.mobileList}
+                      onChangeText={this.selectedMobileNo.bind(this)}
+                    />
+                    <View style={{ alignSelf: 'center' }}>
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.selectMobileError}
+                      </HelperText>
+                    </View>
+                  </View>
+
+                  <View style={styles.row}>
+                    <TextInputPaper
+                      underlineColor="green"
+                      mode="outlined"
+                      keyboardType="numeric"
+                      maxLength={10}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Alternate Mobile No"
+                      onChangeText={alternateMobile => {
+                        this.mobileNoErrorMsg = ''
+                        this.setState({ alternateMobile: alternateMobile.replace(/[^0-9]/g, '') })
+                      }}
+                      value={this.state.alternateMobile}
+                      error={this.mobileNoErrorMsg}
+                    />
+                    <View style={{ alignSelf: 'center' }}>
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.mobileNoErrorMsg}
+                      </HelperText>
+                    </View>
+                  </View>
+
+                  <View style={[styles.row]}>
+                    <Button
+                      mode="contained"
+                      uppercase="false"
+                      color={Colors.background}
+                      // disabled={!this.context.isConnected || this.props.fetching}
+
+                      style={styles.buttonWrapper}
+                      onPress={this.handlePressRequestOrder}>
+                      <Text style={styles.buttonText}>Request Pick Up</Text>
+                    </Button>
+                  </View>
                 </View>
-              </View>
-
-              <View style={[styles.row]}>
-                <Text style={styles.text}> Tell us the phone number to pick up the items</Text>
-                <Dropdown
-                  baseColor={Colors.textField}
-                  label="Select Mobile Number"
-                  data={this.state.mobileList}
-                  onChangeText={this.selectedMobileNo.bind(this)}
-                />
-                <View style={{ alignSelf: 'center' }}>
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.selectMobileError}
-                  </HelperText>
+              ) : (
+                <View style={styles.row}>
+                  <Image style={{ width: 150, height: 150, alignSelf: 'center' }} source={Images.pickUpTruck} />
+                  <Text style={styles.text}> Please create at least one address under your profile section, to raise a request.</Text>
                 </View>
-              </View>
-
-              <View style={styles.row}>
-                <TextInputPaper
-                  underlineColor="green"
-                  mode="outlined"
-                  keyboardType="numeric"
-                  maxLength={10}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Alternate Mobile No"
-                  onChangeText={alternateMobile => {
-                    this.mobileNoErrorMsg = ''
-                    this.setState({ alternateMobile: alternateMobile.replace(/[^0-9]/g, '') })
-                  }}
-                  value={this.state.alternateMobile}
-                  error={this.mobileNoErrorMsg}
-                />
-                <View style={{ alignSelf: 'center' }}>
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.mobileNoErrorMsg}
-                  </HelperText>
-                </View>
-              </View>
-
-              <View style={[styles.row]}>
-                <Button
-                  mode="contained"
-                  uppercase="false"
-                  color={Colors.background}
-                  // disabled={!this.context.isConnected || this.props.fetching}
-
-                  style={styles.buttonWrapper}
-                  onPress={this.handlePressRequestOrder}>
-                  <Text style={styles.buttonText}>Request Pick Up</Text>
-                </Button>
-              </View>
+              )}
             </View>
-          ) : (
-            <View style={styles.row}>
-              <Image style={{ width: 150, height: 150, alignSelf: 'center' }} source={Images.pickUpTruck} />
-              <Text style={styles.text}> Please create at least one address under your profile section, to raise a request.</Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+          </ScrollView>
+        ) : (
+          <NetWork />
+        )}
+      </>
     )
   }
 }

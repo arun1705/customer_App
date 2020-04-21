@@ -6,9 +6,13 @@ import { Colors } from '../../../shared/themes'
 import colors from '../../../shared/themes/colors'
 import ChangePasswordActions from '../password/change-password.reducer'
 import styles from './change-password-screen.styles'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 // import { validateEmail, validateMobNum, validateMobNumLength } from '../../../shared/res/Validate'
 
 class ChangePasswordScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     // Navigation.events().bindComponent(this)
@@ -93,86 +97,92 @@ class ChangePasswordScreen extends React.Component {
     return (
       <>
         <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
-          <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
-          <View style={styles.box}>
-            <View style={styles.innerbox}>
-              <View style={styles.row}>
-                <TextInputPaper
-                  underlineColor="green"
-                  mode="outlined"
-                  autoCapitalize="none"
-                  maxLength={75}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Current Password"
-                  onChangeText={currentPassword => {
-                    this.currentPassErrorMsg = ''
-                    this.setState({ currentPassword })
-                  }}
-                  value={this.state.currentPassword}
-                  error={this.currentPassErrorMsg}
-                />
-                {this.validation ? null : (
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.currentPassErrorMsg}
-                  </HelperText>
-                )}
-              </View>
+          {this.context.isInternetReachable ? (
+            <>
+              <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+              <View style={styles.box}>
+                <View style={styles.innerbox}>
+                  <View style={styles.row}>
+                    <TextInputPaper
+                      underlineColor="green"
+                      mode="outlined"
+                      autoCapitalize="none"
+                      maxLength={75}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Current Password"
+                      onChangeText={currentPassword => {
+                        this.currentPassErrorMsg = ''
+                        this.setState({ currentPassword })
+                      }}
+                      value={this.state.currentPassword}
+                      error={this.currentPassErrorMsg}
+                    />
+                    {this.validation ? null : (
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.currentPassErrorMsg}
+                      </HelperText>
+                    )}
+                  </View>
 
-              <View style={styles.row}>
-                <TextInputPaper
-                  underlineColor="green"
-                  mode="outlined"
-                  autoCapitalize="none"
-                  maxLength={75}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="New Password"
-                  onChangeText={newPassword => {
-                    this.newPasswordErrorMsg = ''
-                    this.setState({ newPassword })
-                  }}
-                  value={this.state.newPassword}
-                  error={this.newPasswordErrorMsg}
-                />
-                {this.validation ? null : (
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.newPasswordErrorMsg}
-                  </HelperText>
-                )}
-              </View>
+                  <View style={styles.row}>
+                    <TextInputPaper
+                      underlineColor="green"
+                      mode="outlined"
+                      autoCapitalize="none"
+                      maxLength={75}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="New Password"
+                      onChangeText={newPassword => {
+                        this.newPasswordErrorMsg = ''
+                        this.setState({ newPassword })
+                      }}
+                      value={this.state.newPassword}
+                      error={this.newPasswordErrorMsg}
+                    />
+                    {this.validation ? null : (
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.newPasswordErrorMsg}
+                      </HelperText>
+                    )}
+                  </View>
 
-              <View style={styles.row}>
-                <TextInputPaper
-                  underlineColor="green"
-                  mode="outlined"
-                  maxLength={75}
-                  autoCapitalize="none"
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Confirm Password"
-                  onChangeText={confirmPassword => {
-                    this.confirmPasswordErrorMsg = ''
-                    this.setState({ confirmPassword })
-                  }}
-                  value={this.state.confirmPassword}
-                  error={this.confirmPasswordErrorMsg}
-                />
-                <HelperText type="error" visible={!this.validation}>
-                  {this.confirmPasswordErrorMsg}
-                </HelperText>
-              </View>
+                  <View style={styles.row}>
+                    <TextInputPaper
+                      underlineColor="green"
+                      mode="outlined"
+                      maxLength={75}
+                      autoCapitalize="none"
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Confirm Password"
+                      onChangeText={confirmPassword => {
+                        this.confirmPasswordErrorMsg = ''
+                        this.setState({ confirmPassword })
+                      }}
+                      value={this.state.confirmPassword}
+                      error={this.confirmPasswordErrorMsg}
+                    />
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.confirmPasswordErrorMsg}
+                    </HelperText>
+                  </View>
 
-              <View style={[styles.row]}>
-                <Button
-                  mode="contained"
-                  disabled={this.props.fetching}
-                  uppercase="false"
-                  color={Colors.background}
-                  style={styles.buttonWrapper}
-                  onPress={this.submitForm}>
-                  <Text style={styles.buttonText}>SUBMIT</Text>
-                </Button>
+                  <View style={[styles.row]}>
+                    <Button
+                      mode="contained"
+                      disabled={this.props.fetching}
+                      uppercase="false"
+                      color={Colors.background}
+                      style={styles.buttonWrapper}
+                      onPress={this.submitForm}>
+                      <Text style={styles.buttonText}>SUBMIT</Text>
+                    </Button>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+            </>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </>
     )

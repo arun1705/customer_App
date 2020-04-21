@@ -11,8 +11,12 @@ import styles from './wallet-entity-edit-screen-style'
 import { TextInput as TextInputPaper, Button, HelperText, ActivityIndicator } from 'react-native-paper'
 import { Colors } from '../../../shared/themes'
 import { validateOnlyNumbersExceptDot } from '../../../shared/res/Validate'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 class WalletEntityEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.amountErrorMsg = ''
@@ -108,59 +112,63 @@ class WalletEntityEditScreen extends React.Component {
     }
     return (
       <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
-        <View style={styles.container}>
-          <Card containerStyle={styles.containerStyle}>
-            <View style={styles.viewStyle}>
-              <Text style={styles.totalbalance}>WALLET BALANCE</Text>
-            </View>
-            <View style={styles.viewStyle}>
-              <Text style={styles.balanceText}>Rs. {this.props.wallet ? this.props.wallet.balance.toFixed(2) : '0'}</Text>
-            </View>
-
-            <View style={styles.lineStyle} />
-
-            <View style={styles.textInput}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                keyboardType="numeric"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Enter amount"
-                onChangeText={amount => {
-                  this.setState({ amount })
-                  this.amountErrorMsg = ''
-                }}
-                value={this.state.amount}
-                error={this.amountErrorMsg}
-              />
-              {this.validation && this.amountErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.amountErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <Button
-              mode="contained"
-              uppercase="false"
-              color={colors.background}
-              disabled={this.props.fetching || this.state.isButtonDisabled}
-              style={styles.buttonWrapper}
-              onPress={this.handlePressWithdraw}>
-              <Text>Withdraw</Text>
-            </Button>
-            <Text style={styles.minimumRedemptionText}>Minimum redemption amount is 150Rs.</Text>
-          </Card>
-
-          <Card containerStyle={styles.containerStyle}>
-            <TouchableOpacity onPress={this.handlePressPointsTransactions}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text>My Recent Transactions</Text>
-                <Icon name="angle-right" type="font-awesome" color="#17661e" size={22} />
+        {this.context.isInternetReachable ? (
+          <View style={styles.container}>
+            <Card containerStyle={styles.containerStyle}>
+              <View style={styles.viewStyle}>
+                <Text style={styles.totalbalance}>WALLET BALANCE</Text>
               </View>
-            </TouchableOpacity>
-          </Card>
-        </View>
+              <View style={styles.viewStyle}>
+                <Text style={styles.balanceText}>Rs. {this.props.wallet ? this.props.wallet.balance.toFixed(2) : '0'}</Text>
+              </View>
+
+              <View style={styles.lineStyle} />
+
+              <View style={styles.textInput}>
+                <TextInputPaper
+                  underlineColor="green"
+                  mode="outlined"
+                  keyboardType="numeric"
+                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                  label="Enter amount"
+                  onChangeText={amount => {
+                    this.setState({ amount })
+                    this.amountErrorMsg = ''
+                  }}
+                  value={this.state.amount}
+                  error={this.amountErrorMsg}
+                />
+                {this.validation && this.amountErrorMsg ? null : (
+                  <HelperText type="error" visible={!this.validation}>
+                    {this.amountErrorMsg}
+                  </HelperText>
+                )}
+              </View>
+
+              <Button
+                mode="contained"
+                uppercase="false"
+                color={colors.background}
+                disabled={this.props.fetching || this.state.isButtonDisabled}
+                style={styles.buttonWrapper}
+                onPress={this.handlePressWithdraw}>
+                <Text>Withdraw</Text>
+              </Button>
+              <Text style={styles.minimumRedemptionText}>Minimum redemption amount is 150Rs.</Text>
+            </Card>
+
+            <Card containerStyle={styles.containerStyle}>
+              <TouchableOpacity onPress={this.handlePressPointsTransactions}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text>My Recent Transactions</Text>
+                  <Icon name="angle-right" type="font-awesome" color="#17661e" size={22} />
+                </View>
+              </TouchableOpacity>
+            </Card>
+          </View>
+        ) : (
+          <NetWork />
+        )}
       </ScrollView>
     )
   }

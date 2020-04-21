@@ -9,8 +9,11 @@ import * as Animatable from 'react-native-animatable'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
 
 import { Colors } from '../../../shared/themes'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class WalletTxEntityScreen extends React.PureComponent {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
 
@@ -144,32 +147,38 @@ class WalletTxEntityScreen extends React.PureComponent {
   render() {
     const { multipleSelect, activeSections } = this.state
     return (
-      <ScrollView style={styles.container}>
-        {!this.props.fetching ? (
-          <View style={styles.container}>
-            {this.state.dataObjects.length !== 0 ? (
-              <Accordion
-                activeSections={activeSections}
-                sections={this.state.dataObjects}
-                touchableComponent={TouchableOpacity}
-                expandMultiple={multipleSelect}
-                renderHeader={this.renderHeader}
-                renderContent={this.renderContent}
-                duration={400}
-                onChange={this.setSections}
-              />
+      <>
+        {this.context.isInternetReachable ? (
+          <ScrollView style={styles.container}>
+            {!this.props.fetching ? (
+              <View style={styles.container}>
+                {this.state.dataObjects.length !== 0 ? (
+                  <Accordion
+                    activeSections={activeSections}
+                    sections={this.state.dataObjects}
+                    touchableComponent={TouchableOpacity}
+                    expandMultiple={multipleSelect}
+                    renderHeader={this.renderHeader}
+                    renderContent={this.renderContent}
+                    duration={400}
+                    onChange={this.setSections}
+                  />
+                ) : (
+                  <View>
+                    <AlertMessage title="No transaction  has been made" />
+                  </View>
+                )}
+              </View>
             ) : (
-              <View>
-                <AlertMessage title="No transaction  has been made" />
+              <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
               </View>
             )}
-          </View>
+          </ScrollView>
         ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
-          </View>
+          <NetWork />
         )}
-      </ScrollView>
+      </>
     )
   }
 }

@@ -9,9 +9,13 @@ import AddressActions from '../address/address.reducer'
 import { connect } from 'react-redux'
 import { ActivityIndicator } from 'react-native-paper'
 import { Colors } from '../../../shared/themes'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 const { containerStyle, text } = styles
 class UserDetailsList extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.phoneRow = this.phoneRow.bind(this)
@@ -109,95 +113,101 @@ class UserDetailsList extends React.Component {
       <ScrollView style={containerStyle}>
         <View>
           <View style={styles.header}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.userDetailsNameText}>Basic Details</Text>
-              <TouchableOpacity>
-                <Icon
-                  name="edit"
-                  color="#17661e"
-                  size={22}
-                  onPress={() =>
-                    this.props.navigation.navigate('edit-profile', {
-                      userId: userDetail.userId,
-                      firstName: userDetail.firstName,
-                      lastName: userDetail.lastName,
-                      loginId: userDetail.loginId,
-                    })
-                  }
+            {this.context.isInternetReachable ? (
+              <>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={styles.userDetailsNameText}>Basic Details</Text>
+                  <TouchableOpacity>
+                    <Icon
+                      name="edit"
+                      color="#17661e"
+                      size={22}
+                      onPress={() =>
+                        this.props.navigation.navigate('edit-profile', {
+                          userId: userDetail.userId,
+                          firstName: userDetail.firstName,
+                          lastName: userDetail.lastName,
+                          loginId: userDetail.loginId,
+                        })
+                      }
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.userDetailsStartRow}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.userDetailsNameText}>
+                      {userDetail.firstName.toUpperCase()} {userDetail.lastName.toUpperCase()}
+                    </Text>
+                  </View>
+
+                  <View style={styles.userDetailsText}>
+                    <Text>Login Id: </Text>
+                    <Text style={text}>{userDetail.loginId}</Text>
+                  </View>
+
+                  <View style={styles.userDetailsText}>
+                    <Text>Email Id: </Text>
+                    <Text style={text}>{userDetail.loginId}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.header}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.userDetailsNameText}>Phone Details</Text>
+                    <TouchableOpacity>
+                      <Icon
+                        name="add"
+                        color="#17661e"
+                        size={28}
+                        onPress={() =>
+                          this.props.navigation.navigate('mobile-details', {
+                            phoneId: 0,
+                            userId: userDetail.id,
+                          })
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <FlatList
+                  contentContainerStyle={styles.listContent}
+                  data={this.props.phones}
+                  renderItem={this.phoneRow}
+                  keyExtractor={this.keyExtractorPhone}
+                  ListEmptyComponent={this.renderPhoneEmpty}
                 />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.userDetailsStartRow}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.userDetailsNameText}>
-                {userDetail.firstName.toUpperCase()} {userDetail.lastName.toUpperCase()}
-              </Text>
-            </View>
 
-            <View style={styles.userDetailsText}>
-              <Text>Login Id: </Text>
-              <Text style={text}>{userDetail.loginId}</Text>
-            </View>
+                <View style={styles.header}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.userDetailsNameText}>Address Details</Text>
+                    <TouchableOpacity>
+                      <Icon
+                        name="add"
+                        color="#17661e"
+                        size={28}
+                        onPress={() =>
+                          this.props.navigation.navigate('address-details', {
+                            id: 0,
+                            userId: userDetail.id,
+                          })
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-            <View style={styles.userDetailsText}>
-              <Text>Email Id: </Text>
-              <Text style={text}>{userDetail.loginId}</Text>
-            </View>
-          </View>
-
-          <View style={styles.header}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.userDetailsNameText}>Phone Details</Text>
-              <TouchableOpacity>
-                <Icon
-                  name="add"
-                  color="#17661e"
-                  size={28}
-                  onPress={() =>
-                    this.props.navigation.navigate('mobile-details', {
-                      phoneId: 0,
-                      userId: userDetail.id,
-                    })
-                  }
+                <FlatList
+                  contentContainerStyle={styles.listContent}
+                  data={this.props.addresses}
+                  renderItem={this.addressRow}
+                  keyExtractor={this.keyExtractorAddress}
+                  ListEmptyComponent={this.renderAddressEmpty}
                 />
-              </TouchableOpacity>
-            </View>
+              </>
+            ) : (
+              <NetWork />
+            )}
           </View>
-          <FlatList
-            contentContainerStyle={styles.listContent}
-            data={this.props.phones}
-            renderItem={this.phoneRow}
-            keyExtractor={this.keyExtractorPhone}
-            ListEmptyComponent={this.renderPhoneEmpty}
-          />
-
-          <View style={styles.header}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.userDetailsNameText}>Address Details</Text>
-              <TouchableOpacity>
-                <Icon
-                  name="add"
-                  color="#17661e"
-                  size={28}
-                  onPress={() =>
-                    this.props.navigation.navigate('address-details', {
-                      id: 0,
-                      userId: userDetail.id,
-                    })
-                  }
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <FlatList
-            contentContainerStyle={styles.listContent}
-            data={this.props.addresses}
-            renderItem={this.addressRow}
-            keyExtractor={this.keyExtractorAddress}
-            ListEmptyComponent={this.renderAddressEmpty}
-          />
         </View>
       </ScrollView>
     )

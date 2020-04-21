@@ -19,8 +19,8 @@ import UserDetailsList from '../modules/entities/user-details/UserDetailsList'
 import EditBasicDetails from '../modules/entities/user-details/EditBasicDetails'
 import PhoneAddEditScreen from '../modules/entities/phone/phone-add-edit-screen'
 import AddressAddEditScreen from '../modules/entities/address/address-entity-edit-screen'
-import WalletEntityEditScreen from '../modules/entities/wallet/wallet-entity-edit-screen';
-import WalletTxEntityScreen from '../modules/entities/wallet-tx/wallet-tx-entity-screen';
+import WalletEntityEditScreen from '../modules/entities/wallet/wallet-entity-edit-screen'
+import WalletTxEntityScreen from '../modules/entities/wallet-tx/wallet-tx-entity-screen'
 
 export class HomeScreen extends Component {
   render() {
@@ -74,7 +74,7 @@ export class HomeScreen extends Component {
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
-             // paddingHorizontal: 20,
+              // paddingHorizontal: 20,
               fontSize: 18,
               fontWeight: '400',
             },
@@ -85,22 +85,6 @@ export class HomeScreen extends Component {
           component={UserDetailEntityEditScreen}
           options={{
             title: 'Edit Profile',
-            headerStyle: {
-              backgroundColor: colors.background,
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              paddingHorizontal: 50,
-              fontSize: 22,
-              fontWeight: '400',
-            },
-          }}
-        />
-
-        <HomeStack.Screen
-          name="EditBasicDetails"
-          component={EditBasicDetails}
-          options={{
             headerStyle: {
               backgroundColor: colors.background,
             },

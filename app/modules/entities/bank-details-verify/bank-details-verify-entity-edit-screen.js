@@ -8,8 +8,12 @@ import { Card, Button, TextInput, HelperText } from 'react-native-paper'
 import ImagePicker from 'react-native-image-picker'
 import { validIfscCode, validateMobNum, validateMobNumLength, validAccountNumber } from '../../../shared/res/Validate'
 import Colors from '../../../shared/themes/colors'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 class BankDetailsVerifyEntityEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.submit = this.submit.bind(this)
@@ -255,345 +259,354 @@ class BankDetailsVerifyEntityEditScreen extends React.Component {
       )
     }
     return (
-      <ScrollView style={ContainerStyle}>
-        {this.props.wallet === null ||
-        (this.props.wallet && this.props.wallet.pancardVerifyStatus == null) ||
-        (this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'PENDING') ||
-        (this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'REJECTED') ? (
-          <Card style={card}>
-            <View style={viewStyle}>
-              <Image source={require('../../../../images/bank.png')} style={folder} />
-              <Text style={text}>VERIFY YOUR ACCOUNT</Text>
-            </View>
-
-            <Text style={[verifyText]}>(Verify your account to withdraw money)</Text>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <Image source={require('../../../../images/error.png')} style={folder} />
-              <View style={{ marginLeft: 10 }}>
-                <Text>To transfer winnings to your bank account, please complete the steps mentioned below: </Text>
-                <View style={{ alignItems: 'baseline' }}>
-                  <Text style={instruction}>{'\u2022'} Verify your Email ID </Text>
-                  <Text style={instruction}>{'\u2022'} Verify your PAN CARD </Text>
-                  <Text style={instruction}>{'\u2022'} Verify your Bank Account Details </Text>
+      <>
+        {this.context.isInternetReachable ? (
+          <ScrollView style={ContainerStyle}>
+            {this.props.wallet === null ||
+            (this.props.wallet && this.props.wallet.pancardVerifyStatus == null) ||
+            (this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'PENDING') ||
+            (this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'REJECTED') ? (
+              <Card style={card}>
+                <View style={viewStyle}>
+                  <Image source={require('../../../../images/bank.png')} style={folder} />
+                  <Text style={text}>VERIFY YOUR ACCOUNT</Text>
                 </View>
-              </View>
-            </View>
-          </Card>
-        ) : null}
 
-        {this.props.wallet &&
-        this.props.wallet.pancardVerifyStatus &&
-        this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
-        this.props.wallet.bankDetailsVerifyStatus &&
-        this.props.wallet.bankDetailsVerifyStatus === 'APPROVED' ? (
-          <Card style={card}>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.textField, marginTop: 40 }}>Your Bank details is verified</Text>
-
-            <View
-              style={{
-                height: 200,
-                backgroundColor: '#47739c',
-                marginRight: 10,
-                marginBottom: 40,
-                marginLeft: 20,
-                marginTop: 10,
-                borderRadius: 3,
-              }}>
-              <Text style={{ fontSize: 16, paddingLeft: 20, paddingTop: 15, paddingBottom: 10, fontWeight: '700', color: Colors.snow }}>
-                {this.props.wallet ? this.props.wallet.bankDetailsVerifyUserName : null}
-              </Text>
-              <Text style={{ fontSize: 12, paddingLeft: 20, color: Colors.snow }}>
-                {this.props.wallet ? this.props.wallet.bankDetailsVerifyPhone : null}
-              </Text>
-              <Text style={{ fontSize: 12, paddingLeft: 20, marginBottom: 15, color: Colors.snow }}>
-                {this.props.wallet ? this.props.wallet.bankDetailsVerifyVpa : null}
-              </Text>
-
-              <Text style={{ fontSize: 14, paddingLeft: 20, color: Colors.snow }}>Account No</Text>
-              <Text style={{ fontSize: 16, paddingLeft: 20, fontWeight: '700', color: Colors.snow }}>
-                {this.props.wallet ? this.props.wallet.bankDetailsVerifyBankAccountNo : null}
-              </Text>
-
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingTop: 10, paddingRight: 20 }}>
-                <View>
-                  <Text style={{ fontSize: 14, color: Colors.snow }}>IFSC Code</Text>
-                  <Text style={{ fontSize: 16, fontWeight: '700', color: Colors.snow }}>
-                    {this.props.wallet ? this.props.wallet.bankDetailsVerifyIfsc : null}
-                  </Text>
+                <Text style={[verifyText]}>(Verify your account to withdraw money)</Text>
+                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                  <Image source={require('../../../../images/error.png')} style={folder} />
+                  <View style={{ marginLeft: 10 }}>
+                    <Text>To transfer winnings to your bank account, please complete the steps mentioned below: </Text>
+                    <View style={{ alignItems: 'baseline' }}>
+                      <Text style={instruction}>{'\u2022'} Verify your Email ID </Text>
+                      <Text style={instruction}>{'\u2022'} Verify your PAN CARD </Text>
+                      <Text style={instruction}>{'\u2022'} Verify your Bank Account Details </Text>
+                    </View>
+                  </View>
                 </View>
-                <Image source={require('../../../../images/approved.png')} style={checkimage} />
-              </View>
-            </View>
-          </Card>
-        ) : null}
+              </Card>
+            ) : null}
 
-        {this.props.wallet &&
-        this.props.wallet.pancardVerifyStatus &&
-        this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
-        this.props.wallet.bankDetailsVerifyStatus &&
-        this.props.wallet.bankDetailsVerifyStatus === 'PENDING' ? (
-          <Card style={card}>
-            <Text style={{ textAlign: 'center', paddingBottom: 50 }}>
-              <Image source={require('../../../../images/bank.png')} style={bankprocess} />
-            </Text>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: '#374957', marginBottom: 50 }}>
-              Bank details verification is under process, it will take 2-3 working days.
-            </Text>
-          </Card>
-        ) : null}
+            {this.props.wallet &&
+            this.props.wallet.pancardVerifyStatus &&
+            this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
+            this.props.wallet.bankDetailsVerifyStatus &&
+            this.props.wallet.bankDetailsVerifyStatus === 'APPROVED' ? (
+              <Card style={card}>
+                <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.textField, marginTop: 40 }}>
+                  Your Bank details is verified
+                </Text>
 
-        {this.props.wallet &&
-        this.props.wallet.pancardVerifyStatus &&
-        this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
-        ((this.props.wallet.bankDetailsVerifyStatus &&
-          (this.props.wallet.bankDetailsVerifyStatus === 'REJECTED' || this.props.wallet.bankDetailsVerifyStatus === '')) ||
-          this.props.wallet.bankDetailsVerifyStatus === null) ? (
-          <View keyboardShouldPersistTaps="always">
-            <Card style={card}>
-              {this.props.wallet && this.props.wallet.bankDetailsVerifyStatus === 'REJECTED' ? (
                 <View
                   style={{
-                    backgroundColor: '#f8d7da',
-                    paddingBottom: 10,
-                    paddingTop: 10,
-                    paddingLeft: 15,
-                    paddingRight: 10,
-                    marginBottom: 10,
+                    height: 200,
+                    backgroundColor: '#47739c',
+                    marginRight: 10,
+                    marginBottom: 40,
+                    marginLeft: 20,
+                    marginTop: 10,
                     borderRadius: 3,
                   }}>
-                  <Text style={{ color: '#a83324' }}>{`REJECTED: ${
-                    this.props.wallet ? this.props.wallet.bankDetailsVerifyReason : null
-                  }`}</Text>
+                  <Text style={{ fontSize: 16, paddingLeft: 20, paddingTop: 15, paddingBottom: 10, fontWeight: '700', color: Colors.snow }}>
+                    {this.props.wallet ? this.props.wallet.bankDetailsVerifyUserName : null}
+                  </Text>
+                  <Text style={{ fontSize: 12, paddingLeft: 20, color: Colors.snow }}>
+                    {this.props.wallet ? this.props.wallet.bankDetailsVerifyPhone : null}
+                  </Text>
+                  <Text style={{ fontSize: 12, paddingLeft: 20, marginBottom: 15, color: Colors.snow }}>
+                    {this.props.wallet ? this.props.wallet.bankDetailsVerifyVpa : null}
+                  </Text>
+
+                  <Text style={{ fontSize: 14, paddingLeft: 20, color: Colors.snow }}>Account No</Text>
+                  <Text style={{ fontSize: 16, paddingLeft: 20, fontWeight: '700', color: Colors.snow }}>
+                    {this.props.wallet ? this.props.wallet.bankDetailsVerifyBankAccountNo : null}
+                  </Text>
+
+                  <View
+                    style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingTop: 10, paddingRight: 20 }}>
+                    <View>
+                      <Text style={{ fontSize: 14, color: Colors.snow }}>IFSC Code</Text>
+                      <Text style={{ fontSize: 16, fontWeight: '700', color: Colors.snow }}>
+                        {this.props.wallet ? this.props.wallet.bankDetailsVerifyIfsc : null}
+                      </Text>
+                    </View>
+                    <Image source={require('../../../../images/approved.png')} style={checkimage} />
+                  </View>
                 </View>
-              ) : null}
+              </Card>
+            ) : null}
 
-              {!this.state.fileData ? (
-                <Button
-                  style={[button, { backgroundColor: '#374957' }]}
-                  onPress={this.uploadBankDetails}
-                  mode="contained"
-                  uppercase="false"
-                  color={Colors.background}>
-                  <Text>UPDATE ACCOUNT PROOF*</Text>
-                </Button>
-              ) : (
-                <Button style={button} onPress={this.uploadBankDetails} mode="contained" uppercase="false" color={Colors.background}>
-                  <Text> ACCOUNT PROOF UPLOADED</Text>
-                </Button>
-              )}
-              <Text style={[inst, { fontSize: 14 }]}>
-                Upload your bank passbook, check book or bank account statement which shows your
-                <Text style={{ fontWeight: 'bold' }}> Name, IFSC code & Account No. </Text>
-              </Text>
+            {this.props.wallet &&
+            this.props.wallet.pancardVerifyStatus &&
+            this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
+            this.props.wallet.bankDetailsVerifyStatus &&
+            this.props.wallet.bankDetailsVerifyStatus === 'PENDING' ? (
+              <Card style={card}>
+                <Text style={{ textAlign: 'center', paddingBottom: 50 }}>
+                  <Image source={require('../../../../images/bank.png')} style={bankprocess} />
+                </Text>
+                <Text style={{ textAlign: 'center', fontSize: 16, color: '#374957', marginBottom: 50 }}>
+                  Bank details verification is under process, it will take 2-3 working days.
+                </Text>
+              </Card>
+            ) : null}
 
-              {this.validation ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.fileDataErrorMsg}
-                </HelperText>
-              )}
+            {this.props.wallet &&
+            this.props.wallet.pancardVerifyStatus &&
+            this.props.wallet.pancardVerifyStatus === 'APPROVED' &&
+            ((this.props.wallet.bankDetailsVerifyStatus &&
+              (this.props.wallet.bankDetailsVerifyStatus === 'REJECTED' || this.props.wallet.bankDetailsVerifyStatus === '')) ||
+              this.props.wallet.bankDetailsVerifyStatus === null) ? (
+              <View keyboardShouldPersistTaps="always">
+                <Card style={card}>
+                  {this.props.wallet && this.props.wallet.bankDetailsVerifyStatus === 'REJECTED' ? (
+                    <View
+                      style={{
+                        backgroundColor: '#f8d7da',
+                        paddingBottom: 10,
+                        paddingTop: 10,
+                        paddingLeft: 15,
+                        paddingRight: 10,
+                        marginBottom: 10,
+                        borderRadius: 3,
+                      }}>
+                      <Text style={{ color: '#a83324' }}>{`REJECTED: ${
+                        this.props.wallet ? this.props.wallet.bankDetailsVerifyReason : null
+                      }`}</Text>
+                    </View>
+                  ) : null}
 
-              <View style={textFieldContainer}>
-                <TextInput
-                  underlineColor="green"
-                  mode="outlined"
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Name*"
-                  onChangeText={userName => {
-                    this.userNameErrorMsg = ''
-                    this.setState({ userName })
-                  }}
-                  maxLength={100}
-                  value={this.state.userName}
-                  error={this.userNameErrorMsg}
-                  blurOnSubmit={false}
-                  // onSubmitEditing={() => {
-                  //   this.secondTextInput.focus()
-                  // }}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  {!this.state.fileData ? (
+                    <Button
+                      style={[button, { backgroundColor: '#374957' }]}
+                      onPress={this.uploadBankDetails}
+                      mode="contained"
+                      uppercase="false"
+                      color={Colors.background}>
+                      <Text>UPDATE ACCOUNT PROOF*</Text>
+                    </Button>
+                  ) : (
+                    <Button style={button} onPress={this.uploadBankDetails} mode="contained" uppercase="false" color={Colors.background}>
+                      <Text> ACCOUNT PROOF UPLOADED</Text>
+                    </Button>
+                  )}
+                  <Text style={[inst, { fontSize: 14 }]}>
+                    Upload your bank passbook, check book or bank account statement which shows your
+                    <Text style={{ fontWeight: 'bold' }}> Name, IFSC code & Account No. </Text>
+                  </Text>
+
                   {this.validation ? null : (
                     <HelperText type="error" visible={!this.validation}>
-                      {this.userNameErrorMsg}
+                      {this.fileDataErrorMsg}
                     </HelperText>
                   )}
-                  <Text style={inst}>As on the proof attached</Text>
-                </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      underlineColor="green"
+                      mode="outlined"
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Name*"
+                      onChangeText={userName => {
+                        this.userNameErrorMsg = ''
+                        this.setState({ userName })
+                      }}
+                      maxLength={100}
+                      value={this.state.userName}
+                      error={this.userNameErrorMsg}
+                      blurOnSubmit={false}
+                      // onSubmitEditing={() => {
+                      //   this.secondTextInput.focus()
+                      // }}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.userNameErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>As on the proof attached</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      underlineColor="green"
+                      mode="outlined"
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Bank Account Number*"
+                      onChangeText={bankAccountNo => {
+                        this.bankAccountNoErrorMsg = ''
+                        this.setState({ bankAccountNo })
+                      }}
+                      secureTextEntry
+                      maxLength={40}
+                      value={this.state.bankAccountNo}
+                      error={this.bankAccountNoErrorMsg}
+                      blurOnSubmit={false}
+                      // onSubmitEditing={() => {
+                      //   this.secondTextInput.focus()
+                      // }}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.bankAccountNoErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>As on the proof attached</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      // ref={input => {
+                      //   this.secondTextInput = input
+                      // }}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      underlineColor="green"
+                      mode="outlined"
+                      label=" Confirm Bank Account Number*"
+                      onChangeText={confirmBankAccountNo => {
+                        this.confirmBankAccountNoErrorMsg = ''
+                        this.setState({ confirmBankAccountNo })
+                      }}
+                      maxLength={40}
+                      value={this.state.confirmBankAccountNo}
+                      error={this.confirmBankAccountNoErrorMsg}
+                      blurOnSubmit={false}
+                      // onSubmitEditing={() => {
+                      //   this.thirdTextInput.focus()
+                      // }}
+                    />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.confirmBankAccountNoErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>As on the poof attached</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      // ref={input => {
+                      //   this.thirdTextInput = input
+                      // }}
+                      underlineColor="green"
+                      mode="outlined"
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="IFSC Code*"
+                      onChangeText={ifscCode => {
+                        this.ifscCodeErrorMsg = ''
+                        this.setState({ ifscCode })
+                      }}
+                      autoCapitalize="characters"
+                      autoComplete="false"
+                      value={this.state.ifscCode}
+                      error={this.ifscCodeErrorMsg}
+                      blurOnSubmit={false}
+                      // onSubmitEditing={() => {
+                      //   this.fourthTextInput.focus()
+                      // }}
+                    />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.ifscCodeErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>As on the poof attached</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      // ref={input => {
+                      //   this.fourthTextInput = input
+                      // }}
+                      underlineColor="green"
+                      mode="outlined"
+                      maxLength={10}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Mobile*"
+                      onChangeText={mobileNumber => {
+                        this.mobileNumberErrorMsg = ''
+                        this.setState({ mobileNumber })
+                      }}
+                      autoCapitalize="characters"
+                      autoComplete="false"
+                      value={this.state.mobileNumber}
+                      error={this.mobileNumberErrorMsg}
+                      blurOnSubmit={false}
+                      // onSubmitEditing={() => {
+                      //   this.fifthTextInput.focus()
+                      // }}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.mobileNumberErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>For PAYTM Wallet</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <TextInput
+                      // ref={input => {
+                      //   this.fifthTextInput = input
+                      // }}
+                      underlineColor="green"
+                      mode="outlined"
+                      maxLength={100}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="VPA*"
+                      onChangeText={vpa => {
+                        this.vpaErrorMsg = ''
+                        this.setState({ vpa })
+                      }}
+                      autoCapitalize="characters"
+                      autoComplete="false"
+                      value={this.state.vpa}
+                      error={this.vpaErrorMsg}
+                      blurOnSubmit={false}
+                    />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {this.validation ? null : (
+                        <HelperText type="error" visible={!this.validation}>
+                          {this.vpaErrorMsg}
+                        </HelperText>
+                      )}
+                      <Text style={inst}>Your UPI ID</Text>
+                    </View>
+                  </View>
+
+                  <View style={textFieldContainer}>
+                    <Text style={[mandatoryText, { marginVertical: 10 }]}>* All fields are mandatory</Text>
+                    <Button
+                      style={button}
+                      disabled={this.props.fetching || this.state.isButtonDisabled}
+                      onPress={this.submit}
+                      mode="contained"
+                      uppercase="false"
+                      color={Colors.background}>
+                      <Text>UPDATE</Text>
+                    </Button>
+                  </View>
+                </Card>
               </View>
-
-              <View style={textFieldContainer}>
-                <TextInput
-                  underlineColor="green"
-                  mode="outlined"
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Bank Account Number*"
-                  onChangeText={bankAccountNo => {
-                    this.bankAccountNoErrorMsg = ''
-                    this.setState({ bankAccountNo })
-                  }}
-                  secureTextEntry
-                  maxLength={40}
-                  value={this.state.bankAccountNo}
-                  error={this.bankAccountNoErrorMsg}
-                  blurOnSubmit={false}
-                  // onSubmitEditing={() => {
-                  //   this.secondTextInput.focus()
-                  // }}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {this.validation ? null : (
-                    <HelperText type="error" visible={!this.validation}>
-                      {this.bankAccountNoErrorMsg}
-                    </HelperText>
-                  )}
-                  <Text style={inst}>As on the proof attached</Text>
-                </View>
-              </View>
-
-              <View style={textFieldContainer}>
-                <TextInput
-                  // ref={input => {
-                  //   this.secondTextInput = input
-                  // }}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  underlineColor="green"
-                  mode="outlined"
-                  label=" Confirm Bank Account Number*"
-                  onChangeText={confirmBankAccountNo => {
-                    this.confirmBankAccountNoErrorMsg = ''
-                    this.setState({ confirmBankAccountNo })
-                  }}
-                  maxLength={40}
-                  value={this.state.confirmBankAccountNo}
-                  error={this.confirmBankAccountNoErrorMsg}
-                  blurOnSubmit={false}
-                  // onSubmitEditing={() => {
-                  //   this.thirdTextInput.focus()
-                  // }}
-                />
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {this.validation ? null : (
-                    <HelperText type="error" visible={!this.validation}>
-                      {this.confirmBankAccountNoErrorMsg}
-                    </HelperText>
-                  )}
-                  <Text style={inst}>As on the poof attached</Text>
-                </View>
-              </View>
-
-              <View style={textFieldContainer}>
-                <TextInput
-                  // ref={input => {
-                  //   this.thirdTextInput = input
-                  // }}
-                  underlineColor="green"
-                  mode="outlined"
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="IFSC Code*"
-                  onChangeText={ifscCode => {
-                    this.ifscCodeErrorMsg = ''
-                    this.setState({ ifscCode })
-                  }}
-                  autoCapitalize="characters"
-                  autoComplete="false"
-                  value={this.state.ifscCode}
-                  error={this.ifscCodeErrorMsg}
-                  blurOnSubmit={false}
-                  // onSubmitEditing={() => {
-                  //   this.fourthTextInput.focus()
-                  // }}
-                />
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {this.validation ? null : (
-                    <HelperText type="error" visible={!this.validation}>
-                      {this.ifscCodeErrorMsg}
-                    </HelperText>
-                  )}
-                  <Text style={inst}>As on the poof attached</Text>
-                </View>
-              </View>
-
-              <View style={textFieldContainer}>
-                <TextInput
-                  // ref={input => {
-                  //   this.fourthTextInput = input
-                  // }}
-                  underlineColor="green"
-                  mode="outlined"
-                  maxLength={10}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Mobile*"
-                  onChangeText={mobileNumber => {
-                    this.mobileNumberErrorMsg = ''
-                    this.setState({ mobileNumber })
-                  }}
-                  autoCapitalize="characters"
-                  autoComplete="false"
-                  value={this.state.mobileNumber}
-                  error={this.mobileNumberErrorMsg}
-                  blurOnSubmit={false}
-                  // onSubmitEditing={() => {
-                  //   this.fifthTextInput.focus()
-                  // }}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {this.validation ? null : (
-                    <HelperText type="error" visible={!this.validation}>
-                      {this.mobileNumberErrorMsg}
-                    </HelperText>
-                  )}
-                  <Text style={inst}>For PAYTM Wallet</Text>
-                </View>
-              </View>
-
-              <View style={textFieldContainer}>
-                <TextInput
-                  // ref={input => {
-                  //   this.fifthTextInput = input
-                  // }}
-                  underlineColor="green"
-                  mode="outlined"
-                  maxLength={100}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="VPA*"
-                  onChangeText={vpa => {
-                    this.vpaErrorMsg = ''
-                    this.setState({ vpa })
-                  }}
-                  autoCapitalize="characters"
-                  autoComplete="false"
-                  value={this.state.vpa}
-                  error={this.vpaErrorMsg}
-                  blurOnSubmit={false}
-                />
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {this.validation ? null : (
-                    <HelperText type="error" visible={!this.validation}>
-                      {this.vpaErrorMsg}
-                    </HelperText>
-                  )}
-                  <Text style={inst}>Your UPI ID</Text>
-                </View>
-              </View>
-
-              <View style={textFieldContainer}>
-                <Text style={[mandatoryText, { marginVertical: 10 }]}>* All fields are mandatory</Text>
-                <Button
-                  style={button}
-                  disabled={this.props.fetching || this.state.isButtonDisabled}
-                  onPress={this.submit}
-                  mode="contained"
-                  uppercase="false"
-                  color={Colors.background}>
-                  <Text>UPDATE</Text>
-                </Button>
-              </View>
-            </Card>
-          </View>
-        ) : null}
-      </ScrollView>
+            ) : null}
+          </ScrollView>
+        ) : (
+          <NetWork />
+        )}
+      </>
     )
   }
 }

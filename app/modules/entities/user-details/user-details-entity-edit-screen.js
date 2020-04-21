@@ -7,10 +7,13 @@ import UserDetailsActions from '../user-details/user-details.reducer'
 import { TextInput as TextInputPaper, Button } from 'react-native-paper'
 import { Colors } from '../../../shared/themes'
 import colors from '../../../shared/themes/colors'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 import styles from './user-details-entity-edit-screen-style'
 
 class UserDetailEntityEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -44,87 +47,92 @@ class UserDetailEntityEditScreen extends React.Component {
       <>
         <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
           <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+          {this.context.isInternetReachable ? (
+            <>
+              <View style={styles.box}>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="First Name"
+                    onChangeText={firstName => {
+                      this.firstNameErrorMsg = ''
 
-          <View style={styles.box}>
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="First Name"
-                onChangeText={firstName => {
-                  this.firstNameErrorMsg = ''
+                      this.setState({ firstName })
+                    }}
+                    value={this.state.firstName}
+                    error={this.firstNameErrorMsg}
+                  />
+                </View>
 
-                  this.setState({ firstName })
-                }}
-                value={this.state.firstName}
-                error={this.firstNameErrorMsg}
-              />
-            </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Last Name"
+                    onChangeText={lastName => {
+                      this.lastNameErrorMsg = ''
+                      this.setState({ lastName })
+                    }}
+                    value={this.state.lastName}
+                    error={this.lastNameErrorMsg}
+                  />
+                </View>
 
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Last Name"
-                onChangeText={lastName => {
-                  this.lastNameErrorMsg = ''
-                  this.setState({ lastName })
-                }}
-                value={this.state.lastName}
-                error={this.lastNameErrorMsg}
-              />
-            </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    keyboardType="numeric"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Login Id"
+                    onChangeText={mobile => {
+                      this.mobileNoErrorMsg = ''
+                      this.setState({ mobile })
+                    }}
+                    disabled="true"
+                    value={this.props.route.params.loginId}
+                    error={this.mobileNoErrorMsg}
+                  />
+                </View>
 
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                keyboardType="numeric"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Login Id"
-                onChangeText={mobile => {
-                  this.mobileNoErrorMsg = ''
-                  this.setState({ mobile })
-                }}
-                disabled="true"
-                value={this.props.route.params.loginId}
-                error={this.mobileNoErrorMsg}
-              />
-            </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Email Id"
+                    onChangeText={emailId => {
+                      this.emailIdErrorMsg = ''
+                      this.setState({ emailId })
+                    }}
+                    disabled="true"
+                    value={this.props.route.params.loginId}
+                    error={this.emailIdErrorMsg}
+                  />
+                </View>
 
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Email Id"
-                onChangeText={emailId => {
-                  this.emailIdErrorMsg = ''
-                  this.setState({ emailId })
-                }}
-                disabled="true"
-                value={this.props.route.params.loginId}
-                error={this.emailIdErrorMsg}
-              />
-            </View>
-
-            <View style={[styles.rowButton]}>
-              <Button
-                mode="contained"
-                uppercase="false"
-                // disabled={!this.context.isConnected || this.props.fetching}
-                color={Colors.background}
-                style={styles.buttonWrapper}
-                onPress={this.submitUpdate}>
-                <Text style={styles.buttonText}>UPDATE</Text>
-              </Button>
-            </View>
-          </View>
+                <View style={[styles.rowButton]}>
+                  <Button
+                    mode="contained"
+                    uppercase="false"
+                    // disabled={!this.context.isConnected || this.props.fetching}
+                    color={Colors.background}
+                    style={styles.buttonWrapper}
+                    onPress={this.submitUpdate}>
+                    <Text style={styles.buttonText}>UPDATE</Text>
+                  </Button>
+                </View>
+              </View>
+            </>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </>
     )

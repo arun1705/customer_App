@@ -9,8 +9,12 @@ import { Card, Button, TextInput, HelperText } from 'react-native-paper'
 import Colors from '../../../shared/themes/colors'
 import ImagePicker from 'react-native-image-picker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 class PancardVerifyEntityEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.submit = this.submit.bind(this)
@@ -210,158 +214,167 @@ class PancardVerifyEntityEditScreen extends React.Component {
     }
 
     return (
-      <ScrollView keyboardShouldPersistTaps="always" style={containerStyle}>
-        {this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'APPROVED' ? (
-          <Card style={card}>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.textField, marginTop: 50 }}>Your PAN is verified</Text>
+      <>
+        {this.context.isInternetReachable ? (
+          <ScrollView keyboardShouldPersistTaps="always" style={containerStyle}>
+            {this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'APPROVED' ? (
+              <Card style={card}>
+                <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.textField, marginTop: 50 }}>Your PAN is verified</Text>
 
-            <View
-              style={{
-                height: 175,
-                backgroundColor: '#47739c',
-                marginRight: 20,
-                marginBottom: 80,
-                marginLeft: 20,
-                marginTop: 10,
-                borderRadius: 10,
-              }}>
-              <Text style={{ fontSize: 16, paddingLeft: 20, paddingTop: 15, paddingBottom: 15, fontWeight: '700', color: Colors.snow }}>
-                {this.props.wallet.pancardVerifyNameOnPacard}
-              </Text>
-              <Text style={{ fontSize: 14, paddingLeft: 20, color: Colors.snow }}>Permanent Account No</Text>
-              <Text style={{ fontSize: 16, paddingLeft: 20, fontWeight: '700', color: Colors.snow }}>
-                {this.props.wallet.pancardVerifyParcardNo}
-              </Text>
+                <View
+                  style={{
+                    height: 175,
+                    backgroundColor: '#47739c',
+                    marginRight: 20,
+                    marginBottom: 80,
+                    marginLeft: 20,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}>
+                  <Text style={{ fontSize: 16, paddingLeft: 20, paddingTop: 15, paddingBottom: 15, fontWeight: '700', color: Colors.snow }}>
+                    {this.props.wallet.pancardVerifyNameOnPacard}
+                  </Text>
+                  <Text style={{ fontSize: 14, paddingLeft: 20, color: Colors.snow }}>Permanent Account No</Text>
+                  <Text style={{ fontSize: 16, paddingLeft: 20, fontWeight: '700', color: Colors.snow }}>
+                    {this.props.wallet.pancardVerifyParcardNo}
+                  </Text>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingTop: 10, paddingRight: 20 }}>
-                <Image source={require('../../../../images/approved.png')} style={checkimage} />
-                <Image source={require('../../../../images/user.png')} style={userimage} />
-              </View>
-            </View>
-          </Card>
-        ) : null}
-
-        {this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'PENDING' ? (
-          <Card style={card}>
-            <Text style={{ textAlign: 'center', paddingBottom: 40 }}>
-              <Image source={require('../../../../images/card.png')} style={pancardprocess} />
-            </Text>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: '#374957', marginBottom: 50 }}>
-              PAN verification is under process, it will take 2-3 working days.
-            </Text>
-          </Card>
-        ) : null}
-
-        {(this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'REJECTED') ||
-        this.props.wallet === null ||
-        (this.props.wallet &&
-          (this.props.wallet.pancardVerifyStatus === null ||
-            (this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === ''))) ? (
-          <Card style={card}>
-            {this.props.wallet && this.props.wallet.pancardVerifyStatus === 'REJECTED' ? (
-              <View
-                style={{
-                  backgroundColor: '#f8d7da',
-                  paddingBottom: 10,
-                  paddingTop: 10,
-                  paddingLeft: 15,
-                  paddingRight: 15,
-                  marginBottom: 10,
-                  borderRadius: 3,
-                }}>
-                <Text style={{ color: '#a83324' }}>{`REJECTED: ${this.props.wallet ? this.props.wallet.pancardVerifyReason : null}`}</Text>
-              </View>
+                  <View
+                    style={{ flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingTop: 10, paddingRight: 20 }}>
+                    <Image source={require('../../../../images/approved.png')} style={checkimage} />
+                    <Image source={require('../../../../images/user.png')} style={userimage} />
+                  </View>
+                </View>
+              </Card>
             ) : null}
 
-            <View style={viewStyle}>
-              <Image source={require('../../../../images/card.png')} style={folder} />
-              <Text style={text}>VERIFY YOUR PAN</Text>
-            </View>
+            {this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'PENDING' ? (
+              <Card style={card}>
+                <Text style={{ textAlign: 'center', paddingBottom: 40 }}>
+                  <Image source={require('../../../../images/card.png')} style={pancardprocess} />
+                </Text>
+                <Text style={{ textAlign: 'center', fontSize: 16, color: '#374957', marginBottom: 50 }}>
+                  PAN verification is under process, it will take 2-3 working days.
+                </Text>
+              </Card>
+            ) : null}
 
-            {!this.state.fileData ? (
-              <Button style={button} onPress={this.uploadPanCard} mode="contained" uppercase="false" color={'#374957'}>
-                <Text>UPLOAD PAN CARD IMAGE*</Text>
-              </Button>
-            ) : (
-              <Button style={button} onPress={this.uploadPanCard} mode="contained" uppercase="false" color={Colors.background}>
-                <Text> PAN CARD UPLOADED</Text>
-              </Button>
-            )}
-            {this.validation ? null : (
-              <HelperText type="error" visible={!this.validation}>
-                {this.fileDataErrorMsg}
-              </HelperText>
-            )}
+            {(this.props.wallet && this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === 'REJECTED') ||
+            this.props.wallet === null ||
+            (this.props.wallet &&
+              (this.props.wallet.pancardVerifyStatus === null ||
+                (this.props.wallet.pancardVerifyStatus && this.props.wallet.pancardVerifyStatus === ''))) ? (
+              <Card style={card}>
+                {this.props.wallet && this.props.wallet.pancardVerifyStatus === 'REJECTED' ? (
+                  <View
+                    style={{
+                      backgroundColor: '#f8d7da',
+                      paddingBottom: 10,
+                      paddingTop: 10,
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                      marginBottom: 10,
+                      borderRadius: 3,
+                    }}>
+                    <Text style={{ color: '#a83324' }}>{`REJECTED: ${
+                      this.props.wallet ? this.props.wallet.pancardVerifyReason : null
+                    }`}</Text>
+                  </View>
+                ) : null}
 
-            <View style={textFieldContainer}>
-              <TextInput
-                underlineColor="green"
-                mode="outlined"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Name*"
-                onChangeText={userName => {
-                  //   this.setState({ name })
-                  this.userNameErrorMsg = ''
+                <View style={viewStyle}>
+                  <Image source={require('../../../../images/card.png')} style={folder} />
+                  <Text style={text}>VERIFY YOUR PAN</Text>
+                </View>
 
-                  this.setState({ userName })
-                }}
-                value={this.state.userName}
-                error={this.userNameErrorMsg}
-                blurOnSubmit={false}
-              />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                {!this.state.fileData ? (
+                  <Button style={button} onPress={this.uploadPanCard} mode="contained" uppercase="false" color={'#374957'}>
+                    <Text>UPLOAD PAN CARD IMAGE*</Text>
+                  </Button>
+                ) : (
+                  <Button style={button} onPress={this.uploadPanCard} mode="contained" uppercase="false" color={Colors.background}>
+                    <Text> PAN CARD UPLOADED</Text>
+                  </Button>
+                )}
                 {this.validation ? null : (
                   <HelperText type="error" visible={!this.validation}>
-                    {this.userNameErrorMsg}
+                    {this.fileDataErrorMsg}
                   </HelperText>
                 )}
-                <Text style={inst}>As on PAN card</Text>
-              </View>
 
-              <TextInput
-                underlineColor="green"
-                mode="outlined"
-                maxLength={10}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="PAN number*"
-                onChangeText={panNumber => {
-                  this.panNumberErrorMsg = ''
-                  this.setState({ panNumber })
-                }}
-                autoCapitalize="characters"
-                autoComplete="false"
-                value={this.state.panNumber}
-                error={this.panNumberErrorMsg}
-                blurOnSubmit={false}
-              />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                {this.validation ? null : (
-                  <HelperText type="error" visible={!this.validation}>
-                    {this.panNumberErrorMsg}
-                  </HelperText>
-                )}
-                <Text style={inst}>10 digit PAN no</Text>
-              </View>
+                <View style={textFieldContainer}>
+                  <TextInput
+                    underlineColor="green"
+                    mode="outlined"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Name*"
+                    onChangeText={userName => {
+                      //   this.setState({ name })
+                      this.userNameErrorMsg = ''
 
-              <Text style={mandatoryText}>* All fields are mandatory</Text>
+                      this.setState({ userName })
+                    }}
+                    value={this.state.userName}
+                    error={this.userNameErrorMsg}
+                    blurOnSubmit={false}
+                  />
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {this.validation ? null : (
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.userNameErrorMsg}
+                      </HelperText>
+                    )}
+                    <Text style={inst}>As on PAN card</Text>
+                  </View>
 
-              <TouchableOpacity onPress={this.showAlert}>
-                <Text style={[mandatoryText, { color: 'blue' }]}> Why should I submit my PAN Card?</Text>
-              </TouchableOpacity>
+                  <TextInput
+                    underlineColor="green"
+                    mode="outlined"
+                    maxLength={10}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="PAN number*"
+                    onChangeText={panNumber => {
+                      this.panNumberErrorMsg = ''
+                      this.setState({ panNumber })
+                    }}
+                    autoCapitalize="characters"
+                    autoComplete="false"
+                    value={this.state.panNumber}
+                    error={this.panNumberErrorMsg}
+                    blurOnSubmit={false}
+                  />
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {this.validation ? null : (
+                      <HelperText type="error" visible={!this.validation}>
+                        {this.panNumberErrorMsg}
+                      </HelperText>
+                    )}
+                    <Text style={inst}>10 digit PAN no</Text>
+                  </View>
 
-              <Button
-                style={button}
-                disabled={this.props.fetching || this.state.isButtonDisabled}
-                onPress={this.submit}
-                mode="contained"
-                uppercase="false"
-                color={Colors.background}>
-                <Text>SUBMIT FOR VERIFICATION</Text>
-              </Button>
-            </View>
-          </Card>
-        ) : null}
-      </ScrollView>
+                  <Text style={mandatoryText}>* All fields are mandatory</Text>
+
+                  <TouchableOpacity onPress={this.showAlert}>
+                    <Text style={[mandatoryText, { color: 'blue' }]}> Why should I submit my PAN Card?</Text>
+                  </TouchableOpacity>
+
+                  <Button
+                    style={button}
+                    disabled={this.props.fetching || this.state.isButtonDisabled}
+                    onPress={this.submit}
+                    mode="contained"
+                    uppercase="false"
+                    color={Colors.background}>
+                    <Text>SUBMIT FOR VERIFICATION</Text>
+                  </Button>
+                </View>
+              </Card>
+            ) : null}
+          </ScrollView>
+        ) : (
+          <NetWork />
+        )}
+      </>
     )
   }
 }

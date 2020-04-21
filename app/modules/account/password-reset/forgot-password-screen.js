@@ -9,8 +9,11 @@ import { HelperText, TextInput } from 'react-native-paper'
 import ForgotPasswordActions from './forgot-password.reducer'
 import styles from './forgot-password-screen.styles'
 import { validateEmail } from '../../../shared/res/Validate'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class ForgotPasswordScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.emailErrorMsg = ''
@@ -64,41 +67,47 @@ class ForgotPasswordScreen extends React.Component {
     return (
       <>
         <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
-          <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
-          <View style={styles.box}>
-            <View style={styles.innerbox}>
-              <View style={styles.row}>
-                <TextInputPaper
-                  underlineColor="green"
-                  mode="outlined"
-                  autoCapitalize="none"
-                  maxLength={75}
-                  theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                  label="Email ID"
-                  onChangeText={email => {
-                    this.emailErrorMsg = ''
-                    this.setState({ email })
-                  }}
-                  value={this.state.email}
-                  error={this.emailErrorMsg}
-                />
-                <HelperText type="error" visible={!this.validation}>
-                  {this.emailErrorMsg}
-                </HelperText>
-              </View>
+          {this.context.isInternetReachable ? (
+            <>
+              <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+              <View style={styles.box}>
+                <View style={styles.innerbox}>
+                  <View style={styles.row}>
+                    <TextInputPaper
+                      underlineColor="green"
+                      mode="outlined"
+                      autoCapitalize="none"
+                      maxLength={75}
+                      theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                      label="Email ID"
+                      onChangeText={email => {
+                        this.emailErrorMsg = ''
+                        this.setState({ email })
+                      }}
+                      value={this.state.email}
+                      error={this.emailErrorMsg}
+                    />
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.emailErrorMsg}
+                    </HelperText>
+                  </View>
 
-              <View style={[styles.row]}>
-                <Button
-                  mode="contained"
-                  // disabled={!this.context.isConnected || this.props.fetching}
-                  uppercase="false"
-                  color={Colors.background}
-                  onPress={this.submitForm}>
-                  <Text style={styles.buttonText}>RESET</Text>
-                </Button>
+                  <View style={[styles.row]}>
+                    <Button
+                      mode="contained"
+                      // disabled={!this.context.isConnected || this.props.fetching}
+                      uppercase="false"
+                      color={Colors.background}
+                      onPress={this.submitForm}>
+                      <Text style={styles.buttonText}>RESET</Text>
+                    </Button>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+            </>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </>
     )

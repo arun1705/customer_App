@@ -10,7 +10,11 @@ import { Images, Metrics, Colors } from '../../shared/themes'
 import LoginActions from './login.reducer'
 import colors from '../../shared/themes/colors'
 import { validateEmail } from '../../shared/res/Validate'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class LoginScreen extends React.Component {
+  static contextType = NetworkContext
+
   static propTypes = {
     dispatch: PropTypes.func,
     fetching: PropTypes.bool,
@@ -110,70 +114,72 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
-        <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
-        <View style={styles.box}>
-          <View style={styles.innerbox}>
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Email Id"
-                maxLength={75}
-                onChangeText={username => {
-                  this.userNameErrorMsg = ''
+        {this.context.isInternetReachable ? (
+          <>
+            <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+            <View style={styles.box}>
+              <View style={styles.innerbox}>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Email Id"
+                    maxLength={75}
+                    onChangeText={username => {
+                      this.userNameErrorMsg = ''
 
-                  this.setState({ username })
-                }}
-                error={this.userNameErrorMsg}
-                value={this.state.username}
-                onSubmitEditing={() => {
-                  this.secondTextInput.focus()
-                }}
-                blurOnSubmit={false}
-              />
-              <HelperText type="error" visible={!this.validation}>
-                {this.userNameErrorMsg}
-              </HelperText>
-            </View>
+                      this.setState({ username })
+                    }}
+                    error={this.userNameErrorMsg}
+                    value={this.state.username}
+                    onSubmitEditing={() => {
+                      this.secondTextInput.focus()
+                    }}
+                    blurOnSubmit={false}
+                  />
+                  <HelperText type="error" visible={!this.validation}>
+                    {this.userNameErrorMsg}
+                  </HelperText>
+                </View>
 
-            <View style={styles.row}>
-              <TextInputPaper
-                ref={input => {
-                  this.secondTextInput = input
-                }}
-                underlineColor="green"
-                mode="outlined"
-                maxLength={75}
-                secureTextEntry={true}
-                autoCapitalize="none"
-                onChangeText={password => {
-                  this.passwordErrorMsg = ''
-                  this.setState({ password })
-                }}
-                error={this.passwordErrorMsg}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Password"
-                value={this.state.password}
-              />
-              <HelperText type="error" visible={!this.validation}>
-                {this.passwordErrorMsg}
-              </HelperText>
-            </View>
-            <View style={[styles.row]}>
-              <Button
-                mode="contained"
-                // disabled={!this.context.isConnected || this.props.fetching}
-                uppercase="false"
-                color={Colors.background}
-                style={styles.buttonWrapper}
-                onPress={this.handlePressLogin}>
-                <Text style={styles.buttonText}>Log In</Text>
-              </Button>
-            </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    ref={input => {
+                      this.secondTextInput = input
+                    }}
+                    underlineColor="green"
+                    mode="outlined"
+                    maxLength={75}
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    onChangeText={password => {
+                      this.passwordErrorMsg = ''
+                      this.setState({ password })
+                    }}
+                    error={this.passwordErrorMsg}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Password"
+                    value={this.state.password}
+                  />
+                  <HelperText type="error" visible={!this.validation}>
+                    {this.passwordErrorMsg}
+                  </HelperText>
+                </View>
+                <View style={[styles.row]}>
+                  <Button
+                    mode="contained"
+                    // disabled={!this.context.isConnected || this.props.fetching}
+                    uppercase="false"
+                    color={Colors.background}
+                    style={styles.buttonWrapper}
+                    onPress={this.handlePressLogin}>
+                    <Text style={styles.buttonText}>Log In</Text>
+                  </Button>
+                </View>
 
-            {/* {!fetching ? (
+                {/* {!fetching ? (
               <View style={[styles.row]}>
                 <Button
                   mode="contained"
@@ -189,18 +195,22 @@ class LoginScreen extends React.Component {
                   <ActivityIndicator size="small" />
               </View>
             )} */}
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
-          <View style={[styles.loginRow]}>
-            <Text style={styles.Text}>Not a member?</Text>
-          </View>
-          <View style={[styles.loginRow]}>
-            <TouchableOpacity onPress={this.signUp}>
-              <Text style={styles.SignUpText}> Register</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
+              <View style={[styles.loginRow]}>
+                <Text style={styles.Text}>Not a member?</Text>
+              </View>
+              <View style={[styles.loginRow]}>
+                <TouchableOpacity onPress={this.signUp}>
+                  <Text style={styles.SignUpText}> Register</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        ) : (
+          <NetWork />
+        )}
       </ScrollView>
     )
   }

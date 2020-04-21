@@ -6,8 +6,12 @@ import Colors from '../../../shared/themes/colors'
 import { validateEmail, validateMobNum, validateMobNumLength } from '../../../shared/res/Validate'
 import { connect } from 'react-redux'
 import UserDetailsAction from '../user-details/user-details.reducer'
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 
 class EmailVerification extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
   }
@@ -21,15 +25,19 @@ class EmailVerification extends React.Component {
     return (
       <View style={containerStyle}>
         <ScrollView keyboardShouldPersistTaps="always">
-          <Card style={card}>
-            <View style={viewStyle}>
-              <Image source={require('../../../../images/mail.png')} style={email} />
-              <View style={textbox}>
-                <Text style={emailText}>Your email address is verifed</Text>
-                <Text style={[emailText, { color: '#04a262' }]}>{this.props.userDetail ? this.props.userDetail.loginId : ''} </Text>
+          {this.context.isInternetReachable ? (
+            <Card style={card}>
+              <View style={viewStyle}>
+                <Image source={require('../../../../images/mail.png')} style={email} />
+                <View style={textbox}>
+                  <Text style={emailText}>Your email address is verifed</Text>
+                  <Text style={[emailText, { color: '#04a262' }]}>{this.props.userDetail ? this.props.userDetail.loginId : ''} </Text>
+                </View>
               </View>
-            </View>
-          </Card>
+            </Card>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </View>
     )

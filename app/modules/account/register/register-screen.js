@@ -8,8 +8,11 @@ import colors from '../../../shared/themes/colors'
 import RegisterActions from '../register/register.reducer'
 import styles from './register-screen.styles'
 import { validateEmail, validateMobNum, validateMobNumLength } from '../../../shared/res/Validate'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class RegisterScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     // Navigation.events().bindComponent(this)
@@ -137,182 +140,188 @@ class RegisterScreen extends React.Component {
   render() {
     return (
       <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
-        <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
+        {this.context.isInternetReachable ? (
+          <>
+            <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
 
-        <View style={styles.box}>
-          <View style={styles.innerbox}>
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="First Name"
-                onChangeText={firstname => {
-                  this.firstNameErrorMsg = ''
+            <View style={styles.box}>
+              <View style={styles.innerbox}>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="First Name"
+                    onChangeText={firstname => {
+                      this.firstNameErrorMsg = ''
 
-                  this.setState({ firstname })
-                }}
-                maxLength={75}
-                value={this.state.firstname}
-                error={this.firstNameErrorMsg}
-                onSubmitEditing={() => {
-                  this.secondTextInput.focus()
-                }}
-                blurOnSubmit={false}
-              />
-              {this.validation && this.firstNameErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.firstNameErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                ref={input => {
-                  this.secondTextInput = input
-                }}
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Last Name"
-                maxLength={75}
-                onChangeText={lastname => {
-                  this.lastNameErrorMsg = ''
-                  this.setState({ lastname })
-                }}
-                value={this.state.lastname}
-                error={this.lastNameErrorMsg}
-                onSubmitEditing={() => {
-                  this.thirdTextInput.focus()
-                }}
-                blurOnSubmit={false}
-              />
-              {this.validation && this.lastNameErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.lastNameErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                ref={input => {
-                  this.thirdTextInput = input
-                }}
-                underlineColor="green"
-                mode="outlined"
-                keyboardType="numeric"
-                maxLength={10}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Mobile"
-                onChangeText={mobile => {
-                  this.mobileNoErrorMsg = ''
-                  this.setState({ mobile })
-                }}
-                value={this.state.mobile}
-                error={this.mobileNoErrorMsg}
-                onSubmitEditing={() => {
-                  this.fourthTextInput.focus()
-                }}
-                blurOnSubmit={false}
-              />
-              {this.validation && this.mobileNoErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.mobileNoErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                ref={input => {
-                  this.fourthTextInput = input
-                }}
-                underlineColor="green"
-                mode="outlined"
-                maxLength={75}
-                autoCapitalize="none"
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Email Id"
-                onChangeText={emailId => {
-                  this.emailIdErrorMsg = ''
-                  this.setState({ emailId })
-                }}
-                value={this.state.emailId}
-                error={this.emailIdErrorMsg}
-                onSubmitEditing={() => {
-                  this.fifthTextInput.focus()
-                }}
-                blurOnSubmit={false}
-              />
-              {this.validation && this.emailIdErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.emailIdErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <View style={styles.row}>
-              <TextInputPaper
-                ref={input => {
-                  this.fifthTextInput = input
-                }}
-                underlineColor="green"
-                mode="outlined"
-                autoCapitalize="none"
-                maxLength={75}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Password"
-                secureTextEntry
-                onChangeText={password => {
-                  this.passwordErrorMsg = ''
-                  this.setState({ password })
-                }}
-                value={this.state.password}
-                error={this.passwordErrorMsg}
-              />
-              {this.validation && this.passwordErrorMsg ? null : (
-                <HelperText type="error" visible={!this.validation}>
-                  {this.passwordErrorMsg}
-                </HelperText>
-              )}
-            </View>
-
-            <View style={[styles.buttonRow]}>
-              <Button
-                mode="contained"
-                // disabled={this.props.fetching}
-                uppercase="false"
-                color={Colors.background}
-                onPress={this.submitUpdate}>
-                <Text style={styles.buttonText}>REGISTER</Text>
-              </Button>
-              <View style={styles.loginRowContainer}>
-                <View style={[styles.loginRow]}>
-                  <Text style={styles.Text}>By Registering I agree to</Text>
+                      this.setState({ firstname })
+                    }}
+                    maxLength={75}
+                    value={this.state.firstname}
+                    error={this.firstNameErrorMsg}
+                    onSubmitEditing={() => {
+                      this.secondTextInput.focus()
+                    }}
+                    blurOnSubmit={false}
+                  />
+                  {this.validation && this.firstNameErrorMsg ? null : (
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.firstNameErrorMsg}
+                    </HelperText>
+                  )}
                 </View>
-                <View style={[styles.loginRow]}>
-                  <TouchableOpacity onPress={this.signUp}>
-                    <Text style={styles.SignUpText}> T&C's</Text>
-                  </TouchableOpacity>
+
+                <View style={styles.row}>
+                  <TextInputPaper
+                    ref={input => {
+                      this.secondTextInput = input
+                    }}
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Last Name"
+                    maxLength={75}
+                    onChangeText={lastname => {
+                      this.lastNameErrorMsg = ''
+                      this.setState({ lastname })
+                    }}
+                    value={this.state.lastname}
+                    error={this.lastNameErrorMsg}
+                    onSubmitEditing={() => {
+                      this.thirdTextInput.focus()
+                    }}
+                    blurOnSubmit={false}
+                  />
+                  {this.validation && this.lastNameErrorMsg ? null : (
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.lastNameErrorMsg}
+                    </HelperText>
+                  )}
+                </View>
+
+                <View style={styles.row}>
+                  <TextInputPaper
+                    ref={input => {
+                      this.thirdTextInput = input
+                    }}
+                    underlineColor="green"
+                    mode="outlined"
+                    keyboardType="numeric"
+                    maxLength={10}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Mobile"
+                    onChangeText={mobile => {
+                      this.mobileNoErrorMsg = ''
+                      this.setState({ mobile })
+                    }}
+                    value={this.state.mobile}
+                    error={this.mobileNoErrorMsg}
+                    onSubmitEditing={() => {
+                      this.fourthTextInput.focus()
+                    }}
+                    blurOnSubmit={false}
+                  />
+                  {this.validation && this.mobileNoErrorMsg ? null : (
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.mobileNoErrorMsg}
+                    </HelperText>
+                  )}
+                </View>
+
+                <View style={styles.row}>
+                  <TextInputPaper
+                    ref={input => {
+                      this.fourthTextInput = input
+                    }}
+                    underlineColor="green"
+                    mode="outlined"
+                    maxLength={75}
+                    autoCapitalize="none"
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Email Id"
+                    onChangeText={emailId => {
+                      this.emailIdErrorMsg = ''
+                      this.setState({ emailId })
+                    }}
+                    value={this.state.emailId}
+                    error={this.emailIdErrorMsg}
+                    onSubmitEditing={() => {
+                      this.fifthTextInput.focus()
+                    }}
+                    blurOnSubmit={false}
+                  />
+                  {this.validation && this.emailIdErrorMsg ? null : (
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.emailIdErrorMsg}
+                    </HelperText>
+                  )}
+                </View>
+
+                <View style={styles.row}>
+                  <TextInputPaper
+                    ref={input => {
+                      this.fifthTextInput = input
+                    }}
+                    underlineColor="green"
+                    mode="outlined"
+                    autoCapitalize="none"
+                    maxLength={75}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Password"
+                    secureTextEntry
+                    onChangeText={password => {
+                      this.passwordErrorMsg = ''
+                      this.setState({ password })
+                    }}
+                    value={this.state.password}
+                    error={this.passwordErrorMsg}
+                  />
+                  {this.validation && this.passwordErrorMsg ? null : (
+                    <HelperText type="error" visible={!this.validation}>
+                      {this.passwordErrorMsg}
+                    </HelperText>
+                  )}
+                </View>
+
+                <View style={[styles.buttonRow]}>
+                  <Button
+                    mode="contained"
+                    // disabled={this.props.fetching}
+                    uppercase="false"
+                    color={Colors.background}
+                    onPress={this.submitUpdate}>
+                    <Text style={styles.buttonText}>REGISTER</Text>
+                  </Button>
+                  <View style={styles.loginRowContainer}>
+                    <View style={[styles.loginRow]}>
+                      <Text style={styles.Text}>By Registering I agree to</Text>
+                    </View>
+                    <View style={[styles.loginRow]}>
+                      <TouchableOpacity onPress={this.signUp}>
+                        <Text style={styles.SignUpText}> T&C's</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10, paddingBottom: 30 }}>
-          <View style={[styles.loginRow]}>
-            <Text style={styles.Text}>Already a User?</Text>
-          </View>
-          <View style={[styles.loginRow]}>
-            <TouchableOpacity onPress={this.signIn}>
-              <Text style={styles.SignUpText}> Log in</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10, paddingBottom: 30 }}>
+              <View style={[styles.loginRow]}>
+                <Text style={styles.Text}>Already a User?</Text>
+              </View>
+              <View style={[styles.loginRow]}>
+                <TouchableOpacity onPress={this.signIn}>
+                  <Text style={styles.SignUpText}> Log in</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        ) : (
+          <NetWork />
+        )}
       </ScrollView>
     )
   }

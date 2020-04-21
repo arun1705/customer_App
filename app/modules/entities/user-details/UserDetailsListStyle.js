@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
 
   header: {
     padding: 8,
-    paddingLeft: 20,
+    // paddingLeft: 20,
     backgroundColor: colors.silver,
     
   },

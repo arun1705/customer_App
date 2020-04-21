@@ -8,8 +8,11 @@ import { connect } from 'react-redux'
 import { Dropdown } from 'react-native-material-dropdown'
 import PhoneTypeActions from '../phone-type/phone-type.reducer'
 import PhoneActions from '../phone/phone.reducer'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 class PhoneAddEditScreen extends React.Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.mobileNoErrorMsg = ''
@@ -135,71 +138,77 @@ class PhoneAddEditScreen extends React.Component {
       <>
         <ScrollView style={[styles.container]} keyboardShouldPersistTaps="always">
           <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
-          <View style={styles.box}>
-            {phoneId === 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.header}>Add Phone Number</Text>
-              </View>
-            ) : (
-              <View style={styles.row}>
-                <Text style={styles.header}>Edit Phone Number</Text>
-              </View>
-            )}
+          {this.context.isInternetReachable ? (
+            <>
+              <View style={styles.box}>
+                {phoneId === 0 ? (
+                  <View style={styles.row}>
+                    <Text style={styles.header}>Add Phone Number</Text>
+                  </View>
+                ) : (
+                  <View style={styles.row}>
+                    <Text style={styles.header}>Edit Phone Number</Text>
+                  </View>
+                )}
 
-            <View style={styles.row}>
-              <TextInputPaper
-                underlineColor="green"
-                mode="outlined"
-                keyboardType="numeric"
-                maxLength={10}
-                theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
-                label="Phone Number"
-                onChangeText={mobile => {
-                  this.mobileNoErrorMsg = ''
-                  this.setState({ mobile: mobile.replace(/[^0-9]/g, '') })
-                }}
-                value={this.state.mobile}
-                error={this.mobileNoErrorMsg}
-              />
-            </View>
+                <View style={styles.row}>
+                  <TextInputPaper
+                    underlineColor="green"
+                    mode="outlined"
+                    keyboardType="numeric"
+                    maxLength={10}
+                    theme={{ colors: { primary: Colors.textField, background: Colors.snow, placeholder: Colors.textField } }}
+                    label="Phone Number"
+                    onChangeText={mobile => {
+                      this.mobileNoErrorMsg = ''
+                      this.setState({ mobile: mobile.replace(/[^0-9]/g, '') })
+                    }}
+                    value={this.state.mobile}
+                    error={this.mobileNoErrorMsg}
+                  />
+                </View>
 
-            <View style={styles.row}>
-              <Dropdown
-                label="Select Type"
-                data={this.state.phoneTypes}
-                value={this.state.phoneTypeId}
-                selectedItemColor={Colors.statusBar}
-                onChangeText={this.Selectedtype.bind(this)}
-              />
-              <View style={styles.toggleButton}>
-                <Text style={{ fontSize: 20, color: Colors.textField }}>Use it as a Primary Number?</Text>
-                <Switch
-                  value={isSwitchOn}
-                  onValueChange={() => {
-                    this.setState({ isSwitchOn: !isSwitchOn })
-                  }}
-                  style={{ alignSelf: 'flex-end' }}
-                />
-              </View>
-            </View>
+                <View style={styles.row}>
+                  <Dropdown
+                    label="Select Type"
+                    data={this.state.phoneTypes}
+                    value={this.state.phoneTypeId}
+                    selectedItemColor={Colors.statusBar}
+                    onChangeText={this.Selectedtype.bind(this)}
+                  />
+                  <View style={styles.toggleButton}>
+                    <Text style={{ fontSize: 20, color: Colors.textField }}>Use it as a Primary Number?</Text>
+                    <Switch
+                      value={isSwitchOn}
+                      onValueChange={() => {
+                        this.setState({ isSwitchOn: !isSwitchOn })
+                      }}
+                      style={{ alignSelf: 'flex-end' }}
+                    />
+                  </View>
+                </View>
 
-            <View style={[styles.rowButton]}>
-              <Button
-                mode="contained"
-                uppercase="false"
-                // disabled={!this.context.isConnected || this.props.fetching}
-                color={Colors.background}
-                style={styles.buttonWrapper}
-                onPress={this.submitUpdate}>
-                <Text style={styles.buttonText}>SAVE</Text>
-              </Button>
-              {/* {phoneId > 0 ? (
+                <View style={[styles.rowButton]}>
+                  <Button
+                    mode="contained"
+                    uppercase="false"
+                    // disabled={!this.context.isConnected || this.props.fetching}
+                    color={Colors.background}
+                    style={styles.buttonWrapper}
+                    onPress={this.submitUpdate}>
+                    <Text style={styles.buttonText}>SAVE</Text>
+                  </Button>
+                  {/* {phoneId > 0 ? (
               <Button mode="contained" uppercase="false" color={Colors.fire} style={styles.buttonWrapper} onPress={this.submitDelete}>
                 <Text style={styles.buttonText}>DELETE</Text>
               </Button>
             ) : null} */}
-            </View>
-          </View>
+                </View>
+              </View>
+            </>
+          ) : (
+            <NetWork />
+          )}
         </ScrollView>
       </>
     )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, TouchableOpacity, View, Text,ActivityIndicator } from 'react-native'
+import { FlatList, TouchableOpacity, View, Text, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 
 import OrderDetailActions from './order-details.reducer'
@@ -7,10 +7,13 @@ import styles from './order-details-entity-screen-style'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
 import { Card } from 'react-native-elements'
 import { Colors } from '../../../shared/themes'
-
+import NetWork from '../../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../../shared/components/offline/context'
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
 class OrderDetailEntityScreen extends React.PureComponent {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
 
@@ -55,14 +58,14 @@ class OrderDetailEntityScreen extends React.PureComponent {
         <Card image={{ uri: url }} title={item.productName}>
           <Text style={styles.labelTextStyle}>Quantity: {item.quantity} kg</Text>
           <View style={{ borderWidth: 0.4, borderColor: 'red', borderRadius: 5, padding: 5, marginVertical: 5 }}>
-            <Text style={styles.labelTextStyle}>Points: {item.prodPCount? item.prodPCount:'0'} pts.</Text>
-            <Text style={styles.labelTextStyle}>
-              Points in Rupee: Rs. {item.productValue?item.productValue:'0.00'}
-            </Text>
+            <Text style={styles.labelTextStyle}>Points: {item.prodPCount ? item.prodPCount : '0'} pts.</Text>
+            <Text style={styles.labelTextStyle}>Points in Rupee: Rs. {item.productValue ? item.productValue : '0.00'}</Text>
           </View>
           <View style={{ borderWidth: 0.4, borderColor: 'green', borderRadius: 5, padding: 5, marginVertical: 5 }}>
-            <Text style={styles.labelTextStyle}>Bonus Points: {item.catTypeBPCount ? item.catTypeBPCount : item.prodBPCount ? item.prodBPCount :'0'} pts.</Text>
-            <Text style={styles.labelTextStyle}>Bonus Points in Rupee: Rs. {item.productBvalue?item.productBvalue:'0.00'}</Text>
+            <Text style={styles.labelTextStyle}>
+              Bonus Points: {item.catTypeBPCount ? item.catTypeBPCount : item.prodBPCount ? item.prodBPCount : '0'} pts.
+            </Text>
+            <Text style={styles.labelTextStyle}>Bonus Points in Rupee: Rs. {item.productBvalue ? item.productBvalue : '0.00'}</Text>
           </View>
         </Card>
       )
@@ -71,14 +74,14 @@ class OrderDetailEntityScreen extends React.PureComponent {
         <Card title={item.productName}>
           <Text style={styles.labelTextStyle}>Quantity: {item.quantity} kg</Text>
           <View style={{ borderWidth: 0.4, borderColor: 'red', borderRadius: 5, padding: 5, marginVertical: 5 }}>
-            <Text style={styles.labelTextStyle}>Points: {item.prodPCount? item.prodPCount:'0'} pts.</Text>
-            <Text style={styles.labelTextStyle}>
-              Points in Rupee: Rs. {item.productValue?item.productValue:'0.00'}
-            </Text>
+            <Text style={styles.labelTextStyle}>Points: {item.prodPCount ? item.prodPCount : '0'} pts.</Text>
+            <Text style={styles.labelTextStyle}>Points in Rupee: Rs. {item.productValue ? item.productValue : '0.00'}</Text>
           </View>
           <View style={{ borderWidth: 0.4, borderColor: 'green', borderRadius: 5, padding: 5, marginVertical: 5 }}>
-            <Text style={styles.labelTextStyle}>Bonus Points: {item.catTypeBPCount ? item.catTypeBPCount : item.prodBPCount ? item.prodBPCount :'0'} pts.</Text>
-            <Text style={styles.labelTextStyle}>Bonus Points in Rupee: Rs. {item.productBvalue?item.productBvalue:'0.00'}</Text>
+            <Text style={styles.labelTextStyle}>
+              Bonus Points: {item.catTypeBPCount ? item.catTypeBPCount : item.prodBPCount ? item.prodBPCount : '0'} pts.
+            </Text>
+            <Text style={styles.labelTextStyle}>Bonus Points in Rupee: Rs. {item.productBvalue ? item.productBvalue : '0.00'}</Text>
           </View>
         </Card>
       )
@@ -112,21 +115,27 @@ class OrderDetailEntityScreen extends React.PureComponent {
 
   render() {
     return (
-      <View style={styles.container} testID="orderDetailScreen">
-        {!this.props.fetching ? (
-          <FlatList
-            contentContainerStyle={styles.listContent}
-            data={this.state.dataObjects}
-            renderItem={this.renderRow}
-            keyExtractor={this.keyExtractor}
-            ListEmptyComponent={this.renderEmpty}
-          />
-        ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
+      <>
+        {this.context.isInternetReachable ? (
+          <View style={styles.container} testID="orderDetailScreen">
+            {!this.props.fetching ? (
+              <FlatList
+                contentContainerStyle={styles.listContent}
+                data={this.state.dataObjects}
+                renderItem={this.renderRow}
+                keyExtractor={this.keyExtractor}
+                ListEmptyComponent={this.renderEmpty}
+              />
+            ) : (
+              <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <ActivityIndicator animating={true} color={Colors.background} size="large" style={{ flex: 1, paddingTop: 50 }} />
+              </View>
+            )}
           </View>
+        ) : (
+          <NetWork />
         )}
-      </View>
+      </>
     )
   }
 }

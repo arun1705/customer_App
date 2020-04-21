@@ -49,6 +49,16 @@ export const styles = StyleSheet.create({
     borderRadius: hp(4.5),
     backgroundColor: 'white',
   },
+  noInternetImage:{
+height:hp(60),
+width:hp(50)
+  },
+  noInternetContainer:{
+flex:1
+  },
+  noInternetText:{
+
+  },
   textName: { fontSize: 32, fontWeight: '600', color: colors.snow },
   item: {
     height: hp(20),

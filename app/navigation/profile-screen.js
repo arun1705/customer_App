@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import { View, Text, Linking, StatusBar, Image, FlatList, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import UserDetailsAction from '../modules/entities/user-details/user-details.reducer'
@@ -6,11 +6,27 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { Card } from 'react-native-paper'
 import colors from '../shared/themes/colors'
 import { styles } from './ProfileStyles'
-const { item, title, cardStyle, imageStyle, img, headerContainer, textName, welcomeText, overlay } = styles
-
+const {
+  item,
+  title,
+  cardStyle,
+  imageStyle,
+  img,
+  noInternetContainer,
+  noInternetImage,
+  noInternetText,
+  headerContainer,
+  textName,
+  welcomeText,
+  overlay,
+} = styles
+import  NetWork  from '../shared/components/offline/NetWork'
 import AppConfig from '../config/app-config'
+import { NetworkContext } from '../shared/components/offline/context'
 
 class ProfileLandingScreen extends Component {
+  static contextType = NetworkContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -64,25 +80,31 @@ class ProfileLandingScreen extends Component {
   render() {
     return (
       <ScrollView style={{ flex: 1 }}>
-        <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" />
-        <View style={cardStyle}>
-          <View style={headerContainer}>
-            <View>
-              <Text style={textName}>{this.props.userDetail ? this.props.userDetail.firstName.toUpperCase() : ''} </Text>
-              <Text style={welcomeText}>Be a better segregator</Text>
+        <StatusBar backgroundColor={colors.statusBar} barStyle="light-content" style={{ flex: 1 }} />
+        {this.context.isInternetReachable ? (
+          <View>
+            <View style={cardStyle}>
+              <View style={headerContainer}>
+                <View>
+                  <Text style={textName}>{this.props.userDetail ? this.props.userDetail.firstName.toUpperCase() : ''} </Text>
+                  <Text style={welcomeText}>Be a better segregator</Text>
+                </View>
+                {/* <Image source={require('../../images/0.jpg')} borderRadius={hp(4.5)} style={imageStyle} resizeMode="cover" /> */}
+              </View>
             </View>
-            {/* <Image source={require('../../images/0.jpg')} borderRadius={hp(4.5)} style={imageStyle} resizeMode="cover" /> */}
+            <View style={overlay}>
+              <FlatList
+                data={this.state.data}
+                keyExtractor={item => item.id.toString()}
+                horizontal={false}
+                numColumns={2}
+                renderItem={({ item, index }) => this.renderCard(item)}
+              />
+            </View>
           </View>
-        </View>
-        <View style={overlay}>
-          <FlatList
-            data={this.state.data}
-            keyExtractor={item => item.id.toString()}
-            horizontal={false}
-            numColumns={2}
-            renderItem={({ item, index }) => this.renderCard(item)}
-          />
-        </View>
+        ) : (
+          <NetWork />
+        )}
       </ScrollView>
     )
   }

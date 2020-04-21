@@ -4,6 +4,7 @@ import EmailVerification from './MobileAndEmail'
 
 import { Colors } from '../../../shared/themes'
 
+
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import PancardVerifyEntityEditScreen from '../pancard-verify/pancard-verify-entity-edit-screen'
 import BankDetailsVerifyEntityEditScreen from '../bank-details-verify/bank-details-verify-entity-edit-screen'
