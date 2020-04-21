@@ -337,7 +337,7 @@ class OrderRequestEntityScreen extends React.PureComponent {
       <>
         {this.context.isInternetReachable ? (
           <View testID="orderRequestScreen" style={{ flex: 1 }}>
-            {!this.props.fetching ? (
+            {this.state.dataObjects ? (
               <ScrollView>
                 <FlatList
                   contentContainerStyle={styles.listContent}
@@ -369,7 +369,7 @@ const mapStateToProps = state => {
     // ...redux state to props here
     orderRequests: state.orderRequests.orderRequests,
     account: state.account.account,
-    fetching: state.orderRequests.fetchingAll,
+    fetching: state.orderRequests.fetchingOne,
     error: state.orderRequests.errorAll,
     deleting: state.orderRequests.deleting,
     errorDeleting: state.orderRequests.errorDeleting,

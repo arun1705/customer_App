@@ -10,8 +10,8 @@ import { Images, Metrics, Colors } from '../../shared/themes'
 import LoginActions from './login.reducer'
 import colors from '../../shared/themes/colors'
 import { validateEmail } from '../../shared/res/Validate'
-import NetWork from '../../../shared/components/offline/NetWork'
-import { NetworkContext } from '../../../shared/components/offline/context'
+import NetWork from '../../shared/components/offline/NetWork'
+import { NetworkContext } from '../../shared/components/offline/context'
 class LoginScreen extends React.Component {
   static contextType = NetworkContext
 
